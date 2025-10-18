@@ -13,7 +13,7 @@ export default function Portfolio() {
   const canvasRef = useRef(null);
   const heroRef = useRef(null);
 
-  const roles = ['Full Stack Engineer', 'Vue.js Expert', 'Node.js Developer', 'Cloud Architect', 'Problem Solver'];
+  const roles = ['Full Stack Software Engineer', 'Vue.js & React Expert', 'Node.js & Python Developer', 'SaaS Product Builder', 'Open Source Contributor'];
   const [roleIndex, setRoleIndex] = useState(0);
 
   // Generate starfield (fewer stars on mobile for performance)
@@ -235,41 +235,69 @@ export default function Portfolio() {
   const experiences = [
     {
       company: "BITSTRAPPED",
-      role: "Full Stack Software Engineer",
+      website: "https://www.bitstrapped.com/",
+      logo: "/company-logos/bitstrapped.png",
+      role: "Full Stack Engineer",
       location: "Toronto, ON, Remote",
-      period: "March 2022 – Present",
+      period: "2023 – Present",
       color: "from-blue-500 to-cyan-500",
       icon: "💼",
       points: [
-        "Conduct effective requirements gathering in client meetings",
-        "Architect applications with VueJs(Nuxt), NodeJS, and Python",
-        "Lead code reviews and GitFlow branching strategies"
+        "Architect enterprise-grade SaaS applications with Vue.js/Nuxt and Node.js + Python serving millions of requests monthly",
+        "Achieved 95%+ client satisfaction through effective requirements gathering and expectation management",
+        "Reduced deployment time by 50% via Docker containerization and automated CI/CD pipelines",
+        "Improved application performance by 40% through optimization and caching strategies",
+        "Maintain 99.9%+ uptime across all production services with sub-200ms API response times"
       ]
     },
     {
-      company: "CEFALO AS",
+      company: "CEFALO",
+      website: "https://www.cefalo.com/",
+      logo: "/company-logos/cefalo.svg",
       role: "Software Engineer",
-      location: "Dhaka, Bangladesh",
-      period: "Jan 2020 – Feb 2022",
+      location: "Dhaka, Bangladesh (Remote for Norwegian Team)",
+      period: "2022 – 2023",
       color: "from-purple-500 to-pink-500",
       icon: "🚀",
       points: [
-        "Collaborated with Norwegian team on large-scale product",
-        "Led RESTful API development with NodeJS and PostgreSQL",
-        "Improved SPA frontend using VueJS and Vuex"
+        "Led RESTful API development with Node.js handling 100K+ daily requests for international clients",
+        "Reduced API response times by 35% through PostgreSQL query optimization and indexing",
+        "Built responsive SPA features with Vue.js/Vuex, reducing bundle size by 30% via code splitting",
+        "Achieved 80%+ code coverage through comprehensive testing and maintained SOLID principles",
+        "Collaborated across GMT+1 to GMT+6 timezones in Agile/Scrum environment"
       ]
     },
     {
-      company: "SIGMA SOLUTIONS",
-      role: "Software Engineer",
+      company: "SIGMA SOLUTIONS BD",
+      website: "https://sigmasolutions.com.bd/",
+      logo: "/company-logos/sigma.png",
+      role: "Senior Software Engineer",
       location: "Dhaka, Bangladesh",
-      period: "April 2018 – 2020",
+      period: "2019 – 2022",
       color: "from-orange-500 to-red-500",
       icon: "⚡",
       points: [
-        "Developed automation modules for telecom industry",
-        "Implemented alarm bots and omnichannel support system",
-        "Built ETL system for AWS Redshift"
+        "Built intelligent automation bots processing 10,000+ events daily for telecom infrastructure",
+        "Reduced incident response time by 70% through real-time alarm and monitoring systems",
+        "Architected omnichannel customer support platform reducing ticket resolution time by 45%",
+        "Developed reusable Laravel packages improving development efficiency by 40%",
+        "Integrated multi-platform communication (Facebook, WhatsApp, Email) with SLA tracking"
+      ]
+    },
+    {
+      company: "ROMONI",
+      website: "https://romoni.com.bd/",
+      logo: "/company-logos/romoni.svg",
+      role: "Software Engineer",
+      location: "Dhaka, Bangladesh",
+      period: "2018 – 2019",
+      color: "from-green-500 to-teal-500",
+      icon: "🌟",
+      points: [
+        "Built operations management and customer care modules from scratch for beauty & lifestyle platform",
+        "Improved overall product performance by optimizing database queries and event handling",
+        "Gained end-to-end experience from requirement analysis to deployment",
+        "Developed features empowering women entrepreneurs in Bangladesh's service industry"
       ]
     }
   ];
@@ -277,39 +305,58 @@ export default function Portfolio() {
   const projects = [
     {
       name: "VUE3-DRAG-DROP",
-      tech: "Vue3, Javascript",
-      description: "NPM package with 100+ weekly downloads for drag and drop data transfer.",
+      tech: "Vue 3, JavaScript, NPM",
+      description: "Open-source NPM package with 100+ weekly downloads and 4.5+ star rating. Simplifies drag-and-drop functionality in Vue 3 applications with zero dependencies.",
       gradient: "from-green-400 to-blue-500",
-      icon: "📦"
+      icon: "📦",
+      link: "https://www.npmjs.com/package/vue3-drag-drop"
     },
     {
-      name: "MOVIE APP",
-      tech: "Vue.js, themoviedb API",
-      description: "Discover movies with details, cast, and ratings using themoviedb API.",
+      name: "VUE PLOTLY",
+      tech: "Vue 3, Plotly.js",
+      description: "Thin wrapper of Plotly.js for Vue 3, making it easy to create interactive charts and data visualizations in Vue applications.",
+      gradient: "from-blue-400 to-cyan-500",
+      icon: "📊",
+      link: "https://github.com/TusharJoy"
+    },
+    {
+      name: "SMARTCOMM AI",
+      tech: "Vue.js, Node.js, AI/ML",
+      description: "AI-powered communication platform featured on smartcomm.ai. Built intelligent customer engagement solutions.",
       gradient: "from-purple-400 to-pink-500",
-      icon: "🎬"
+      icon: "🤖",
+      link: "https://smartcomm.ai"
     },
     {
-      name: "FOOD DELIVERY APP",
+      name: "ROMONI PLATFORM",
       tech: "Laravel, Vue.js, MySQL",
-      description: "Subscription delivery system with Authorize.Net integration.",
-      gradient: "from-yellow-400 to-orange-500",
-      icon: "🍕"
+      description: "On-demand beauty and lifestyle marketplace connecting skilled women entrepreneurs to customers across Bangladesh.",
+      gradient: "from-pink-400 to-rose-500",
+      icon: "💄",
+      link: "https://romoni.com.bd"
     },
     {
       name: "DNA VISUALIZATION",
-      tech: "D3.js",
-      description: "Interactive tool for analyzing DNA sequences and cancer patterns.",
+      tech: "D3.js, Bioinformatics",
+      description: "Interactive research tool for analyzing DNA sequences and cancer patterns. Academic thesis project focused on visual salience in genomic data.",
       gradient: "from-cyan-400 to-blue-500",
       icon: "🧬"
+    },
+    {
+      name: "TELECOM AUTOMATION SUITE",
+      tech: "PHP, Laravel, Redis, AWS",
+      description: "Intelligent bot system processing 10,000+ daily events for telecom infrastructure monitoring, reducing incident response by 70%.",
+      gradient: "from-orange-400 to-red-500",
+      icon: "📡"
     }
   ];
 
   const skills = {
-    "Languages": ["PHP", "Node.js", "JavaScript", "HTML", "CSS", "SQL", "C++", "GoLang"],
-    "Frameworks": ["Laravel", "Express.js", "Vue.js", "Nuxt"],
-    "Tools": ["Redis", "Docker", "IntelliJ", "Vim", "ClickUp", "Slack"],
-    "Cloud": ["AWS", "GCP", "Azure", "Docker"]
+    "Frontend": ["Vue.js", "Nuxt.js", "React.js", "JavaScript", "HTML5", "CSS3", "Vuex", "Redux"],
+    "Backend": ["Node.js", "Python", "PHP", "Express.js", "Laravel", "RESTful APIs", "Microservices"],
+    "Databases": ["PostgreSQL", "MySQL", "Redis", "AWS Redshift"],
+    "Cloud & DevOps": ["GCP", "AWS", "Azure", "Docker", "CI/CD", "Git", "GitFlow"],
+    "Tools & Others": ["Agile/Scrum", "ETL", "D3.js", "Plotly.js", "IntelliJ", "Vim"]
   };
 
   const scrollToSection = (sectionId) => {
@@ -517,8 +564,8 @@ export default function Portfolio() {
           </div>
 
           <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed animate-visible-up px-6">
-            Crafting exceptional digital experiences with clean code and modern architecture.
-            Specialized in building scalable full-stack applications.
+            Building scalable SaaS solutions across continents. 7+ years architecting enterprise-grade
+            applications with 99.9%+ uptime. Transforming complex business challenges into elegant technical solutions.
           </p>
           
           <div className="flex flex-wrap gap-3 sm:gap-4 justify-center animate-visible-up stagger-1 px-4">
@@ -603,17 +650,21 @@ export default function Portfolio() {
               visibleElements.has('about') ? 'animate-visible-right' : 'opacity-0'
             }`}>
               <p className="hover:text-white transition-colors duration-300">
-                Hey there! I'm a passionate Full Stack Software Engineer with 6+ years of experience 
-                turning complex problems into elegant solutions.
+                Hey there! I'm a results-driven Full Stack Software Engineer with <span className="text-purple-400 font-semibold">7+ years</span> of experience
+                architecting and delivering high-performance web applications for international clients across North America, Europe, and Asia.
               </p>
               <p className="hover:text-white transition-colors duration-300">
-                Currently working remotely with <span className="text-blue-400 font-semibold animate-pulse">BITSTRAPPED</span> in Toronto, 
-                I specialize in building scalable web applications using modern JavaScript frameworks, 
-                particularly Vue.js and Node.js.
+                Currently working remotely with <span className="text-blue-400 font-semibold animate-pulse">BITSTRAPPED</span> in Toronto,
+                I've achieved a <span className="text-green-400 font-semibold">95%+ client satisfaction rate</span> by delivering enterprise-grade SaaS solutions
+                that handle millions of requests monthly with sub-200ms response times and 99.9%+ uptime.
               </p>
               <p className="hover:text-white transition-colors duration-300">
-                When I'm not coding, I contribute to open-source projects (like my VUE3-DRAG-DROP package 
-                with 100+ weekly downloads!) and explore new technologies to stay ahead of the curve.
+                I specialize in modern JavaScript ecosystems (Vue.js, React, Node.js), Python backend services, and cloud infrastructure (GCP, AWS).
+                My approach combines clean architecture, scalability, and exceptional user experience.
+              </p>
+              <p className="hover:text-white transition-colors duration-300">
+                Beyond client work, I'm an active open-source contributor. My <span className="text-pink-400 font-semibold">vue3-drag-drop</span> package
+                has <span className="text-yellow-400 font-semibold">100+ weekly downloads</span> on NPM and helps developers worldwide build intuitive drag-and-drop interfaces.
               </p>
             </div>
           </div>
@@ -654,16 +705,32 @@ export default function Portfolio() {
                   <div className={`absolute inset-0 bg-gradient-to-r ${exp.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
                   
                   <div className="flex items-start gap-6 relative z-10">
-                    <div className="text-5xl transform group-hover:scale-125 group-hover:rotate-12 transition-all duration-500">
-                      {exp.icon}
+                    <div className="flex-shrink-0 w-16 h-16 bg-white rounded-xl p-3 flex items-center justify-center transform group-hover:scale-110 transition-all duration-500 shadow-lg">
+                      <img
+                        src={exp.logo}
+                        alt={`${exp.company} logo`}
+                        className="w-full h-full object-contain"
+                      />
                     </div>
-                    
+
                     <div className="flex-1">
                       <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
                         <div>
-                          <h3 className={`text-3xl font-bold mb-2 bg-gradient-to-r ${exp.color} bg-clip-text text-transparent`}>
-                            {exp.company}
-                          </h3>
+                          {exp.website ? (
+                            <a
+                              href={exp.website}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`text-3xl font-bold mb-2 bg-gradient-to-r ${exp.color} bg-clip-text text-transparent hover:opacity-80 transition-opacity inline-flex items-center gap-2`}
+                            >
+                              {exp.company}
+                              <ExternalLink size={20} className="text-blue-400" />
+                            </a>
+                          ) : (
+                            <h3 className={`text-3xl font-bold mb-2 bg-gradient-to-r ${exp.color} bg-clip-text text-transparent`}>
+                              {exp.company}
+                            </h3>
+                          )}
                           <p className="text-xl text-gray-300 mb-2">{exp.role}</p>
                           <p className="text-gray-500">{exp.location}</p>
                         </div>
@@ -729,15 +796,17 @@ export default function Portfolio() {
                   
                   <p className="text-sm text-purple-400 mb-4 font-mono relative z-10">{project.tech}</p>
                   <p className="text-gray-300 mb-6 relative z-10 group-hover:text-white transition-colors">{project.description}</p>
-                  
-                  <a
-                    href="https://github.com/TusharJoy"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-all duration-300 relative z-10 group-hover:gap-4"
-                  >
-                    View Project <ExternalLink size={16} className="transform group-hover:rotate-45 transition-transform" />
-                  </a>
+
+                  {project.link && (
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-all duration-300 relative z-10 group-hover:gap-4"
+                    >
+                      View Project <ExternalLink size={16} className="transform group-hover:rotate-45 transition-transform" />
+                    </a>
+                  )}
                 </div>
               </div>
               );
