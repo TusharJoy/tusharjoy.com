@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Github, Linkedin, Mail, Phone, ExternalLink, Code, GraduationCap, ChevronDown, Terminal, Sparkles, Zap, Rocket, Star, TrendingUp, Award, Users, Download, ArrowUp, FileDown, X, Moon, Sun, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import * as THREE from 'three';
 
 // Skill Bar Component with Animation
 function SkillBar({ skill, visible, delay }) {
@@ -90,6 +91,173 @@ function StatsCard({ icon, value, suffix, label, gradient, delay }) {
   );
 }
 
+// 1. Hero Section - Particle Network
+function HeroParticles({ containerRef }) {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    if (!canvasRef.current || !containerRef.current) return;
+
+    const container = containerRef.current;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, alpha: true, antialias: true });
+
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    camera.position.z = 50;
+
+    // Particles
+    const particleCount = 80;
+    const particles = [];
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+
+    for (let i = 0; i < particleCount; i++) {
+      const x = (Math.random() - 0.5) * 100;
+      const y = (Math.random() - 0.5) * 100;
+      const z = (Math.random() - 0.5) * 100;
+      positions[i * 3] = x;
+      positions[i * 3 + 1] = y;
+      positions[i * 3 + 2] = z;
+      particles.push(new THREE.Vector3(x, y, z));
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const material = new THREE.PointsMaterial({ color: 0x667eea, size: 2, transparent: true, opacity: 0.6 });
+    const particleSystem = new THREE.Points(geometry, material);
+    scene.add(particleSystem);
+
+    const animate = () => {
+      requestAnimationFrame(animate);
+      particleSystem.rotation.y += 0.001;
+      particleSystem.rotation.x += 0.0005;
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    const handleResize = () => {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      renderer.dispose();
+    };
+  }, [containerRef]);
+
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />;
+}
+
+// 2. Skills Section - Floating Geometric Shapes
+function SkillsShapes({ containerRef }) {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    if (!canvasRef.current || !containerRef.current) return;
+
+    const container = containerRef.current;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, alpha: true, antialias: true });
+
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    camera.position.z = 8;
+
+    const shapes = [];
+    const geometries = [
+      new THREE.BoxGeometry(0.5, 0.5, 0.5),
+      new THREE.SphereGeometry(0.3, 16, 16),
+      new THREE.TorusGeometry(0.3, 0.1, 16, 100),
+      new THREE.OctahedronGeometry(0.3)
+    ];
+
+    const colors = [0x667eea, 0x764ba2, 0xf093fb, 0x4facfe];
+
+    for (let i = 0; i < 6; i++) {
+      const geom = geometries[i % geometries.length];
+      const mat = new THREE.MeshBasicMaterial({ color: colors[i % colors.length], wireframe: true, transparent: true, opacity: 0.4 });
+      const mesh = new THREE.Mesh(geom, mat);
+      mesh.position.set((Math.random() - 0.5) * 10, (Math.random() - 0.5) * 6, (Math.random() - 0.5) * 5);
+      shapes.push(mesh);
+      scene.add(mesh);
+    }
+
+    const animate = () => {
+      requestAnimationFrame(animate);
+      shapes.forEach((shape, i) => {
+        shape.rotation.x += 0.003;
+        shape.rotation.y += 0.003;
+        shape.position.y += Math.sin(Date.now() * 0.001 + i) * 0.002;
+      });
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    const handleResize = () => {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      renderer.dispose();
+    };
+  }, [containerRef]);
+
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-30" />;
+}
+
+// 3. Projects Section - 3D Globe
+function ProjectsGlobe({ containerRef }) {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    if (!canvasRef.current || !containerRef.current) return;
+
+    const container = containerRef.current;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, alpha: true, antialias: true });
+
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    camera.position.z = 3;
+
+    const globeGeometry = new THREE.SphereGeometry(1.5, 32, 32);
+    const globeMaterial = new THREE.MeshBasicMaterial({ color: 0x667eea, wireframe: true, transparent: true, opacity: 0.2 });
+    const globe = new THREE.Mesh(globeGeometry, globeMaterial);
+    scene.add(globe);
+
+    const animate = () => {
+      requestAnimationFrame(animate);
+      globe.rotation.y += 0.002;
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    const handleResize = () => {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      renderer.dispose();
+    };
+  }, [containerRef]);
+
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />;
+}
+
 export default function Portfolio() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [hoveredCard, setHoveredCard] = useState(null);
@@ -103,7 +271,7 @@ export default function Portfolio() {
   const [searchTerm, setSearchTerm] = useState('');
   const [scrollProgress, setScrollProgress] = useState(0);
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const [logoClickCount, setLogoClickCount] = useState(0);
+  const [, setLogoClickCount] = useState(0);
   const [showEasterEgg, setShowEasterEgg] = useState(false);
   const [konamiActivated, setKonamiActivated] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -115,11 +283,13 @@ export default function Portfolio() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const canvasRef = useRef(null);
   const heroRef = useRef(null);
+  const skillsRef = useRef(null);
+  const projectsRef = useRef(null);
   const konamiSequence = useRef([]);
-  const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+  const konamiCode = useMemo(() => ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'], []);
   const particleIdRef = useRef(0);
 
-  const roles = ['Full Stack Software Engineer', 'Vue.js & React Expert', 'Node.js & Python Developer', 'SaaS Product Builder', 'Open Source Contributor'];
+  const roles = useMemo(() => ['Full Stack Software Engineer', 'Vue.js & React Expert', 'Node.js & Python Developer', 'SaaS Product Builder', 'Open Source Contributor'], []);
   const [roleIndex, setRoleIndex] = useState(0);
 
   // Testimonials data - Real LinkedIn Recommendations
@@ -183,9 +353,6 @@ export default function Portfolio() {
   const isDark = theme === 'dark';
   const bgColor = isDark ? 'bg-black' : 'bg-white';
   const textColor = isDark ? 'text-white' : 'text-gray-900';
-  const bgGradient = isDark ? 'from-gray-900 to-black' : 'from-gray-100 to-white';
-  const borderColor = isDark ? 'border-gray-800' : 'border-gray-200';
-  const cardHoverBorder = isDark ? 'hover:border-gray-600' : 'hover:border-gray-300';
 
   // Generate starfield (fewer stars on mobile for performance)
   useEffect(() => {
@@ -289,7 +456,7 @@ export default function Portfolio() {
     }, 80);
 
     return () => clearInterval(typingInterval);
-  }, [roleIndex]);
+  }, [roleIndex, roles]);
 
   // Cursor blink
   useEffect(() => {
@@ -1105,9 +1272,12 @@ export default function Portfolio() {
       `}</style>
 
       {/* Hero Section */}
-      <section id="home" ref={heroRef} className="relative min-h-screen flex items-center justify-center px-6" data-animate>
-        <div 
-          className="text-center max-w-5xl"
+      <section id="home" ref={heroRef} className="relative min-h-screen flex items-center justify-center px-6 overflow-hidden" data-animate>
+        {/* 3D Particle Background */}
+        <HeroParticles containerRef={heroRef} />
+
+        <div
+          className="text-center max-w-5xl relative z-10"
           style={{
             transform: `translate(${mousePosition.x * 0.3}px, ${mousePosition.y * 0.3}px)`
           }}
@@ -1479,8 +1649,11 @@ export default function Portfolio() {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6" data-animate>
-        <div className="container mx-auto max-w-6xl">
+      <section id="projects" ref={projectsRef} className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 overflow-hidden" data-animate>
+        {/* 3D Globe Background */}
+        <ProjectsGlobe containerRef={projectsRef} />
+
+        <div className="container mx-auto max-w-6xl relative z-10">
           <h2 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-8 sm:mb-12 text-center ${
             visibleElements.has('projects') ? 'animate-visible-scale' : 'opacity-0'
           }`}>
@@ -1570,8 +1743,11 @@ export default function Portfolio() {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-gradient-to-b from-gray-900 to-black" data-animate>
-        <div className="container mx-auto max-w-6xl">
+      <section id="skills" ref={skillsRef} className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-gradient-to-b from-gray-900 to-black overflow-hidden" data-animate>
+        {/* 3D Floating Shapes Background */}
+        <SkillsShapes containerRef={skillsRef} />
+
+        <div className="container mx-auto max-w-6xl relative z-10">
           <h2 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-12 sm:mb-16 text-center ${
             visibleElements.has('skills') ? 'animate-visible-scale' : 'opacity-0'
           }`}>
