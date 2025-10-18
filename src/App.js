@@ -1,5 +1,100 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Github, Linkedin, Mail, Phone, ExternalLink, Code, GraduationCap, ChevronDown, Terminal, Sparkles, Zap, Rocket, Star } from 'lucide-react';
+import { Github, Linkedin, Mail, Phone, ExternalLink, Code, GraduationCap, ChevronDown, Terminal, Sparkles, Zap, Rocket, Star, TrendingUp, Award, Users, Download, ArrowUp } from 'lucide-react';
+
+// Skill Bar Component with Animation
+function SkillBar({ skill, visible, delay }) {
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    if (visible) {
+      const timer = setTimeout(() => {
+        setWidth(skill.level);
+      }, delay * 100);
+      return () => clearTimeout(timer);
+    }
+  }, [visible, skill.level, delay]);
+
+  return (
+    <div className="mb-6 group">
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-gray-300 font-medium group-hover:text-white transition-colors">
+          {skill.name}
+        </span>
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-gray-500 group-hover:text-gray-400 transition-colors">
+            {skill.years} exp
+          </span>
+          <span className="text-sm text-blue-400 font-semibold min-w-[45px] text-right">
+            {skill.level}%
+          </span>
+        </div>
+      </div>
+      <div className="h-2 bg-gray-800 rounded-full overflow-hidden group-hover:h-3 transition-all duration-300">
+        <div
+          className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full transition-all duration-1000 ease-out relative overflow-hidden"
+          style={{ width: `${width}%` }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Animated Counter Component
+function StatsCard({ icon, value, suffix, label, gradient, visible, delay }) {
+  const [count, setCount] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    if (visible && !hasAnimated) {
+      setHasAnimated(true);
+      const duration = 2000; // 2 seconds
+      const steps = 60;
+      const increment = parseFloat(value) / steps;
+      let current = 0;
+
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= parseFloat(value)) {
+          setCount(parseFloat(value));
+          clearInterval(timer);
+        } else {
+          setCount(current);
+        }
+      }, duration / steps);
+
+      return () => clearInterval(timer);
+    }
+  }, [visible, value, hasAnimated]);
+
+  const displayValue = value.includes('.')
+    ? count.toFixed(1)
+    : Math.floor(count);
+
+  return (
+    <div
+      className={`group relative ${visible ? 'animate-visible-up' : 'opacity-0'}`}
+      style={{ animationDelay: `${delay}s` }}
+    >
+      <div className={`absolute inset-0 bg-gradient-to-r ${gradient} rounded-3xl blur-2xl opacity-0 group-hover:opacity-40 transition-all duration-500`} />
+
+      <div className="relative bg-gradient-to-br from-gray-900 to-black p-6 md:p-8 rounded-3xl border border-gray-800 group-hover:border-gray-600 transition-all duration-500 text-center transform group-hover:scale-105">
+        <div className="flex justify-center mb-4 transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
+          {icon}
+        </div>
+
+        <div className={`text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}>
+          {displayValue}{suffix}
+        </div>
+
+        <div className="text-sm md:text-base text-gray-400 group-hover:text-gray-300 transition-colors">
+          {label}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Portfolio() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -10,6 +105,10 @@ export default function Portfolio() {
   const [floatingIcons, setFloatingIcons] = useState([]);
   const [stars, setStars] = useState([]);
   const [shootingStars, setShootingStars] = useState([]);
+  const [selectedFilter, setSelectedFilter] = useState('All');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const canvasRef = useRef(null);
   const heroRef = useRef(null);
 
@@ -140,6 +239,19 @@ export default function Portfolio() {
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // Scroll progress tracking and back to top button visibility
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / totalHeight) * 100;
+      setScrollProgress(progress);
+      setShowBackToTop(window.scrollY > 500); // Show button after scrolling 500px
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
 
@@ -309,7 +421,9 @@ export default function Portfolio() {
       description: "Open-source NPM package with 100+ weekly downloads and 4.5+ star rating. Simplifies drag-and-drop functionality in Vue 3 applications with zero dependencies.",
       gradient: "from-green-400 to-blue-500",
       icon: "📦",
-      link: "https://www.npmjs.com/package/vue3-drag-drop"
+      link: "https://www.npmjs.com/package/vue3-drag-drop",
+      category: "Open Source",
+      tags: ["Vue.js", "Frontend", "NPM"]
     },
     {
       name: "VUE PLOTLY",
@@ -317,7 +431,9 @@ export default function Portfolio() {
       description: "Thin wrapper of Plotly.js for Vue 3, making it easy to create interactive charts and data visualizations in Vue applications.",
       gradient: "from-blue-400 to-cyan-500",
       icon: "📊",
-      link: "https://github.com/TusharJoy"
+      link: "https://github.com/TusharJoy",
+      category: "Open Source",
+      tags: ["Vue.js", "Frontend", "Data Viz"]
     },
     {
       name: "SMARTCOMM AI",
@@ -325,7 +441,9 @@ export default function Portfolio() {
       description: "AI-powered communication platform featured on smartcomm.ai. Built intelligent customer engagement solutions.",
       gradient: "from-purple-400 to-pink-500",
       icon: "🤖",
-      link: "https://smartcomm.ai"
+      link: "https://smartcomm.ai",
+      category: "SaaS",
+      tags: ["Full Stack", "AI/ML", "Node.js"]
     },
     {
       name: "ROMONI PLATFORM",
@@ -333,30 +451,60 @@ export default function Portfolio() {
       description: "On-demand beauty and lifestyle marketplace connecting skilled women entrepreneurs to customers across Bangladesh.",
       gradient: "from-pink-400 to-rose-500",
       icon: "💄",
-      link: "https://romoni.com.bd"
+      link: "https://romoni.com.bd",
+      category: "SaaS",
+      tags: ["Full Stack", "Laravel", "E-commerce"]
     },
     {
       name: "DNA VISUALIZATION",
       tech: "D3.js, Bioinformatics",
       description: "Interactive research tool for analyzing DNA sequences and cancer patterns. Academic thesis project focused on visual salience in genomic data.",
       gradient: "from-cyan-400 to-blue-500",
-      icon: "🧬"
+      icon: "🧬",
+      category: "Research",
+      tags: ["Frontend", "Data Viz", "Research"]
     },
     {
       name: "TELECOM AUTOMATION SUITE",
       tech: "PHP, Laravel, Redis, AWS",
       description: "Intelligent bot system processing 10,000+ daily events for telecom infrastructure monitoring, reducing incident response by 70%.",
       gradient: "from-orange-400 to-red-500",
-      icon: "📡"
+      icon: "📡",
+      category: "Enterprise",
+      tags: ["Backend", "Laravel", "DevOps"]
     }
   ];
 
   const skills = {
-    "Frontend": ["Vue.js", "Nuxt.js", "React.js", "JavaScript", "HTML5", "CSS3", "Vuex", "Redux"],
-    "Backend": ["Node.js", "Python", "PHP", "Express.js", "Laravel", "RESTful APIs", "Microservices"],
-    "Databases": ["PostgreSQL", "MySQL", "Redis", "AWS Redshift"],
-    "Cloud & DevOps": ["GCP", "AWS", "Azure", "Docker", "CI/CD", "Git", "GitFlow"],
-    "Tools & Others": ["Agile/Scrum", "ETL", "D3.js", "Plotly.js", "IntelliJ", "Vim"]
+    "Frontend": [
+      { name: "Vue.js", level: 95, years: "5+" },
+      { name: "Nuxt.js", level: 90, years: "3+" },
+      { name: "React.js", level: 85, years: "3+" },
+      { name: "JavaScript", level: 95, years: "7+" },
+      { name: "HTML5/CSS3", level: 95, years: "7+" },
+      { name: "Vuex/Redux", level: 90, years: "4+" }
+    ],
+    "Backend": [
+      { name: "Node.js", level: 95, years: "6+" },
+      { name: "Python", level: 85, years: "3+" },
+      { name: "PHP", level: 85, years: "4+" },
+      { name: "Express.js", level: 90, years: "5+" },
+      { name: "Laravel", level: 85, years: "4+" },
+      { name: "RESTful APIs", level: 95, years: "6+" }
+    ],
+    "Databases": [
+      { name: "PostgreSQL", level: 90, years: "5+" },
+      { name: "MySQL", level: 85, years: "5+" },
+      { name: "Redis", level: 80, years: "3+" },
+      { name: "AWS Redshift", level: 75, years: "2+" }
+    ],
+    "Cloud & DevOps": [
+      { name: "GCP", level: 85, years: "3+" },
+      { name: "AWS", level: 80, years: "3+" },
+      { name: "Docker", level: 90, years: "4+" },
+      { name: "CI/CD", level: 90, years: "4+" },
+      { name: "Git/GitFlow", level: 95, years: "7+" }
+    ]
   };
 
   const scrollToSection = (sectionId) => {
@@ -364,8 +512,27 @@ export default function Portfolio() {
     element?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Project filtering logic
+  const categories = ['All', 'Open Source', 'SaaS', 'Enterprise', 'Research'];
+
+  const filteredProjects = projects.filter(project => {
+    const matchesFilter = selectedFilter === 'All' || project.category === selectedFilter;
+    const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         project.tech.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
+
   return (
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
+      {/* Scroll Progress Bar */}
+      <div className="fixed top-0 left-0 right-0 h-1 bg-gray-900 z-50">
+        <div
+          className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 transition-all duration-150 ease-out shadow-lg shadow-blue-500/50"
+          style={{ width: `${scrollProgress}%` }}
+        />
+      </div>
+
       {/* Animated Background Canvas */}
       <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none" />
 
@@ -523,6 +690,19 @@ export default function Portfolio() {
           }
         }
 
+        @keyframes shimmer {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+
+        .animate-shimmer {
+          animation: shimmer 2s infinite;
+        }
+
         .animate-visible-left { animation: slideInLeft 0.8s ease-out forwards; }
         .animate-visible-right { animation: slideInRight 0.8s ease-out forwards; }
         .animate-visible-up { animation: slideInUp 0.8s ease-out forwards; }
@@ -671,8 +851,60 @@ export default function Portfolio() {
         </div>
       </section>
 
+      {/* Animated Stats Section */}
+      <section id="stats" className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-gradient-to-b from-black to-gray-900" data-animate>
+        <div className="container mx-auto max-w-6xl">
+          <h2 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-12 sm:mb-16 text-center ${
+            visibleElements.has('stats') ? 'animate-visible-scale' : 'opacity-0'
+          }`}>
+            <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              Impact By The Numbers
+            </span>
+          </h2>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            <StatsCard
+              icon={<TrendingUp className="text-blue-400" size={40} />}
+              value="7"
+              suffix="+"
+              label="Years Experience"
+              gradient="from-blue-500 to-cyan-500"
+              visible={visibleElements.has('stats')}
+              delay={0}
+            />
+            <StatsCard
+              icon={<Award className="text-green-400" size={40} />}
+              value="99.9"
+              suffix="%"
+              label="Uptime SLA"
+              gradient="from-green-500 to-emerald-500"
+              visible={visibleElements.has('stats')}
+              delay={0.1}
+            />
+            <StatsCard
+              icon={<Users className="text-purple-400" size={40} />}
+              value="95"
+              suffix="%"
+              label="Client Satisfaction"
+              gradient="from-purple-500 to-pink-500"
+              visible={visibleElements.has('stats')}
+              delay={0.2}
+            />
+            <StatsCard
+              icon={<Download className="text-yellow-400" size={40} />}
+              value="100"
+              suffix="+"
+              label="Weekly NPM Downloads"
+              gradient="from-yellow-500 to-orange-500"
+              visible={visibleElements.has('stats')}
+              delay={0.3}
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Experience Section */}
-      <section id="experience" className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-gradient-to-b from-black to-gray-900" data-animate>
+      <section id="experience" className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-gradient-to-b from-gray-900 to-black" data-animate>
         <div className="container mx-auto max-w-6xl">
           <h2 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-12 sm:mb-16 text-center ${
             visibleElements.has('experience') ? 'animate-visible-scale' : 'opacity-0'
@@ -757,16 +989,52 @@ export default function Portfolio() {
       {/* Projects Section */}
       <section id="projects" className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6" data-animate>
         <div className="container mx-auto max-w-6xl">
-          <h2 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-12 sm:mb-16 text-center ${
+          <h2 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-8 sm:mb-12 text-center ${
             visibleElements.has('projects') ? 'animate-visible-scale' : 'opacity-0'
           }`}>
             <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
               Featured Projects
             </span>
           </h2>
-          
+
+          {/* Filter & Search UI */}
+          <div className={`mb-12 ${visibleElements.has('projects') ? 'animate-visible-up' : 'opacity-0'}`}>
+            {/* Search Bar */}
+            <div className="mb-6">
+              <input
+                type="text"
+                placeholder="🔍 Search projects by name, tech, or description..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-6 py-4 bg-gray-900/50 border border-gray-700 rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
+              />
+            </div>
+
+            {/* Category Filters */}
+            <div className="flex flex-wrap justify-center gap-3">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedFilter(category)}
+                  className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
+                    selectedFilter === category
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/50 scale-110'
+                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white hover:scale-105'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+
+            {/* Results Count */}
+            <div className="text-center mt-6 text-gray-400">
+              Showing {filteredProjects.length} of {projects.length} projects
+            </div>
+          </div>
+
           <div className="grid md:grid-cols-2 gap-8">
-            {projects.map((project, index) => {
+            {filteredProjects.map((project, index) => {
               const cardId = `project-${index}`;
 
               return (
@@ -828,30 +1096,27 @@ export default function Portfolio() {
           
           <div className="grid md:grid-cols-2 gap-8">
             {Object.entries(skills).map(([category, items], catIndex) => (
-              <div 
-                key={category} 
+              <div
+                key={category}
                 className={`group ${
                   visibleElements.has('skills') ? 'animate-visible-scale' : 'opacity-0'
                 } stagger-${catIndex + 1}`}
               >
-                <div className="relative bg-gradient-to-br from-gray-900 to-black p-8 rounded-3xl border border-gray-800 hover:border-gray-600 transition-all duration-500 overflow-hidden transform hover:scale-105">
+                <div className="relative bg-gradient-to-br from-gray-900 to-black p-8 rounded-3xl border border-gray-800 hover:border-gray-600 transition-all duration-500 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
+
                   <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent relative z-10">
                     {category}
                   </h3>
-                  
-                  <div className="flex flex-wrap gap-3 relative z-10">
+
+                  <div className="relative z-10">
                     {items.map((skill, index) => (
-                      <span
+                      <SkillBar
                         key={index}
-                        className="px-4 py-2 bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-blue-500/30 rounded-full text-sm hover:border-blue-400 hover:scale-125 hover:bg-blue-500/20 transition-all duration-300 cursor-default hover:shadow-lg hover:shadow-blue-500/50 transform hover:-translate-y-1"
-                        style={{
-                          animationDelay: `${index * 0.05}s`
-                        }}
-                      >
-                        {skill}
-                      </span>
+                        skill={skill}
+                        visible={visibleElements.has('skills')}
+                        delay={index}
+                      />
                     ))}
                   </div>
                 </div>
@@ -947,6 +1212,17 @@ export default function Portfolio() {
           ))}
         </div>
       </section>
+
+      {/* Back to Top Button */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className={`fixed bottom-8 right-8 z-50 p-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full shadow-lg shadow-blue-500/50 hover:shadow-blue-500/70 transition-all duration-300 hover:scale-110 active:scale-95 ${
+          showBackToTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16 pointer-events-none'
+        }`}
+        aria-label="Back to top"
+      >
+        <ArrowUp size={24} className="text-white" />
+      </button>
 
       {/* Footer */}
       <footer className="border-t border-gray-800 py-8">
