@@ -109,8 +109,16 @@ export default function Portfolio() {
   const [searchTerm, setSearchTerm] = useState('');
   const [scrollProgress, setScrollProgress] = useState(0);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formErrors, setFormErrors] = useState({});
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [logoClickCount, setLogoClickCount] = useState(0);
+  const [showEasterEgg, setShowEasterEgg] = useState(false);
+  const [konamiActivated, setKonamiActivated] = useState(false);
   const canvasRef = useRef(null);
   const heroRef = useRef(null);
+  const konamiSequence = useRef([]);
+  const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
 
   const roles = ['Full Stack Software Engineer', 'Vue.js & React Expert', 'Node.js & Python Developer', 'SaaS Product Builder', 'Open Source Contributor'];
   const [roleIndex, setRoleIndex] = useState(0);
@@ -253,6 +261,43 @@ export default function Portfolio() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Konami Code Easter Egg
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      konamiSequence.current.push(e.key);
+      konamiSequence.current = konamiSequence.current.slice(-10); // Keep only last 10 keys
+
+      if (JSON.stringify(konamiSequence.current) === JSON.stringify(konamiCode)) {
+        setKonamiActivated(true);
+        setTimeout(() => setKonamiActivated(false), 5000);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [konamiCode]);
+
+  // Console Easter Egg
+  useEffect(() => {
+    console.log('%c🚀 Welcome to Tushar\'s Portfolio!', 'color: #667eea; font-size: 24px; font-weight: bold;');
+    console.log('%c💼 Looking for a developer? Let\'s talk!', 'color: #764ba2; font-size: 16px;');
+    console.log('%c📧 tusharghoshjoy@gmail.com', 'color: #48bb78; font-size: 14px;');
+    console.log('%c\n🎮 Easter Egg Hint: Try the Konami Code! (↑↑↓↓←→←→BA)', 'color: #f6ad55; font-size: 12px;');
+  }, []);
+
+  // Logo click easter egg
+  const handleLogoClick = () => {
+    setLogoClickCount(prev => {
+      const newCount = prev + 1;
+      if (newCount === 5) {
+        setShowEasterEgg(true);
+        setTimeout(() => setShowEasterEgg(false), 3000);
+        return 0;
+      }
+      return newCount;
+    });
+  };
 
 
   // Enhanced animated background
@@ -523,6 +568,45 @@ export default function Portfolio() {
     return matchesFilter && matchesSearch;
   });
 
+  // Contact form handlers
+  const validateForm = () => {
+    const errors = {};
+    if (!formData.name.trim()) errors.name = 'Name is required';
+    if (!formData.email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = 'Invalid email address';
+    }
+    if (!formData.message.trim()) errors.message = 'Message is required';
+    else if (formData.message.trim().length < 10) errors.message = 'Message must be at least 10 characters';
+    return errors;
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    const errors = validateForm();
+    setFormErrors(errors);
+
+    if (Object.keys(errors).length === 0) {
+      // Form is valid - in a real app, you'd send this to a backend
+      console.log('Form submitted:', formData);
+      setFormSubmitted(true);
+      setFormData({ name: '', email: '', message: '' });
+
+      // Reset success message after 5 seconds
+      setTimeout(() => setFormSubmitted(false), 5000);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    // Clear error when user starts typing
+    if (formErrors[name]) {
+      setFormErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
   return (
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
       {/* Scroll Progress Bar */}
@@ -532,6 +616,36 @@ export default function Portfolio() {
           style={{ width: `${scrollProgress}%` }}
         />
       </div>
+
+      {/* Konami Code Easter Egg Overlay */}
+      {konamiActivated && (
+        <div className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center">
+          <div className="animate-visible-scale">
+            <div className="text-9xl animate-spin">🚀</div>
+            <div className="text-4xl font-bold text-center mt-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent animate-pulse">
+              KONAMI CODE ACTIVATED!
+            </div>
+            <div className="text-2xl text-center mt-2 text-white">
+              You found the secret! 🎮
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Logo Click Easter Egg */}
+      {showEasterEgg && (
+        <div className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center">
+          <div className="animate-visible-scale">
+            <div className="text-8xl">🎉</div>
+            <div className="text-3xl font-bold text-center mt-4 text-white animate-bounce">
+              You discovered the secret!
+            </div>
+            <div className="text-xl text-center mt-2 text-gray-300">
+              Thanks for exploring! 😄
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Animated Background Canvas */}
       <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none" />
@@ -730,7 +844,10 @@ export default function Portfolio() {
           </div>
           
           <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold mb-6 animate-visible-scale px-4">
-            <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent inline-block hover:scale-105 transition-transform duration-300">
+            <span
+              onClick={handleLogoClick}
+              className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent inline-block hover:scale-105 transition-transform duration-300 cursor-pointer"
+            >
               Tushar Ghosh Joy
             </span>
           </h1>
@@ -1205,6 +1322,96 @@ export default function Portfolio() {
             <div className="flex items-center gap-2 hover:text-white transition-colors duration-300 hover:scale-110">
               <Mail size={18} className="animate-pulse" />
               <span>tusharghoshjoy@gmail.com</span>
+            </div>
+          </div>
+
+          {/* Contact Form */}
+          <div className={`mt-16 max-w-2xl mx-auto ${
+            visibleElements.has('contact') ? 'animate-visible-up stagger-3' : 'opacity-0'
+          }`}>
+            <div className="relative bg-gradient-to-br from-gray-900 to-black p-8 rounded-3xl border border-gray-800">
+              <h3 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                Send Me a Message
+              </h3>
+
+              {formSubmitted && (
+                <div className="mb-6 p-4 bg-green-500/20 border border-green-500/50 rounded-xl text-green-400 text-center animate-visible-scale">
+                  ✓ Message sent successfully! I'll get back to you soon.
+                </div>
+              )}
+
+              <form onSubmit={handleFormSubmit} className="space-y-6">
+                {/* Name Field */}
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
+                    Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-3 bg-gray-800/50 border ${
+                      formErrors.name ? 'border-red-500' : 'border-gray-700'
+                    } rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 transition-all duration-300`}
+                    placeholder="Your name"
+                  />
+                  {formErrors.name && (
+                    <p className="mt-2 text-sm text-red-400">{formErrors.name}</p>
+                  )}
+                </div>
+
+                {/* Email Field */}
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+                    Email *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-3 bg-gray-800/50 border ${
+                      formErrors.email ? 'border-red-500' : 'border-gray-700'
+                    } rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 transition-all duration-300`}
+                    placeholder="your.email@example.com"
+                  />
+                  {formErrors.email && (
+                    <p className="mt-2 text-sm text-red-400">{formErrors.email}</p>
+                  )}
+                </div>
+
+                {/* Message Field */}
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
+                    Message *
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    rows="5"
+                    className={`w-full px-4 py-3 bg-gray-800/50 border ${
+                      formErrors.message ? 'border-red-500' : 'border-gray-700'
+                    } rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 resize-none`}
+                    placeholder="Tell me about your project or just say hi..."
+                  ></textarea>
+                  {formErrors.message && (
+                    <p className="mt-2 text-sm text-red-400">{formErrors.message}</p>
+                  )}
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  className="w-full py-4 bg-gradient-to-r from-blue-500 via-purple-600 to-pink-600 rounded-xl font-semibold text-white hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg shadow-blue-500/50 hover:shadow-blue-500/70"
+                >
+                  Send Message
+                </button>
+              </form>
             </div>
           </div>
         </div>
