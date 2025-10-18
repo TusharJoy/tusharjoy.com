@@ -1,3 +1,11 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /static/
+Disallow: /*.json$
+
+# Sitemap
+Sitemap: https://www.tusharjoy.com/sitemap.xml
+
+# Crawl-delay for good bot behavior
+Crawl-delay: 1
