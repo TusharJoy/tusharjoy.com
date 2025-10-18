@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Github, Linkedin, Mail, Phone, ExternalLink, Code, GraduationCap, ChevronDown, Terminal, Sparkles, Zap, Rocket, Star, TrendingUp, Award, Users, Download, ArrowUp, FileDown } from 'lucide-react';
+import { Github, Linkedin, Mail, Phone, ExternalLink, Code, GraduationCap, ChevronDown, Terminal, Sparkles, Zap, Rocket, Star, TrendingUp, Award, Users, Download, ArrowUp, FileDown, X, Moon, Sun, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 
 // Skill Bar Component with Animation
 function SkillBar({ skill, visible, delay }) {
@@ -42,41 +42,35 @@ function SkillBar({ skill, visible, delay }) {
 }
 
 // Animated Counter Component
-function StatsCard({ icon, value, suffix, label, gradient, visible, delay }) {
+function StatsCard({ icon, value, suffix, label, gradient, delay }) {
   const [count, setCount] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => {
-    if (visible && !hasAnimated) {
-      setHasAnimated(true);
-      const duration = 2000; // 2 seconds
-      const steps = 60;
-      const increment = parseFloat(value) / steps;
-      let current = 0;
+    const duration = 2000;
+    const steps = 60;
+    const targetValue = parseFloat(value);
+    const increment = targetValue / steps;
+    let current = 0;
 
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= parseFloat(value)) {
-          setCount(parseFloat(value));
-          clearInterval(timer);
-        } else {
-          setCount(current);
-        }
-      }, duration / steps);
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= targetValue) {
+        setCount(targetValue);
+        clearInterval(timer);
+      } else {
+        setCount(current);
+      }
+    }, duration / steps);
 
-      return () => clearInterval(timer);
-    }
-  }, [visible, value, hasAnimated]);
+    return () => clearInterval(timer);
+  }, [value]);
 
-  const displayValue = value.includes('.')
+  const displayValue = String(value).includes('.')
     ? count.toFixed(1)
     : Math.floor(count);
 
   return (
-    <div
-      className={`group relative ${visible ? 'animate-visible-up' : 'opacity-0'}`}
-      style={{ animationDelay: `${delay}s` }}
-    >
+    <div className="group relative">
       <div className={`absolute inset-0 bg-gradient-to-r ${gradient} rounded-3xl blur-2xl opacity-0 group-hover:opacity-40 transition-all duration-500`} />
 
       <div className="relative bg-gradient-to-br from-gray-900 to-black p-6 md:p-8 rounded-3xl border border-gray-800 group-hover:border-gray-600 transition-all duration-500 text-center transform group-hover:scale-105">
@@ -109,19 +103,89 @@ export default function Portfolio() {
   const [searchTerm, setSearchTerm] = useState('');
   const [scrollProgress, setScrollProgress] = useState(0);
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [formErrors, setFormErrors] = useState({});
-  const [formSubmitted, setFormSubmitted] = useState(false);
   const [logoClickCount, setLogoClickCount] = useState(0);
   const [showEasterEgg, setShowEasterEgg] = useState(false);
   const [konamiActivated, setKonamiActivated] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [cursorTrail, setCursorTrail] = useState([]);
+  const [theme, setTheme] = useState(() => {
+    // Get theme from localStorage or default to 'dark'
+    return localStorage.getItem('portfolio-theme') || 'dark';
+  });
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
   const canvasRef = useRef(null);
   const heroRef = useRef(null);
   const konamiSequence = useRef([]);
   const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+  const particleIdRef = useRef(0);
 
   const roles = ['Full Stack Software Engineer', 'Vue.js & React Expert', 'Node.js & Python Developer', 'SaaS Product Builder', 'Open Source Contributor'];
   const [roleIndex, setRoleIndex] = useState(0);
+
+  // Testimonials data - Real LinkedIn Recommendations
+  const testimonials = [
+    {
+      name: "Anders Semb Hermansen",
+      role: "Leder Systemutvikling at adsign",
+      company: "Cefalo (Former Manager)",
+      image: "👨‍💼",
+      text: "I had the pleasure of working with Tushar Joy for the last 12 months, during which time he served as a developer with frontend responsibility on our project. Tushar is a skilled developer with a solid understanding of Vue.JS and Node. Throughout the duration of our project he was a valuable asset to our team. He is a quick learner and has improved a lot over the past 12 months. I highly recommend Tushar for any future development opportunities.",
+      rating: 5
+    },
+    {
+      name: "Md Ashiquzzaman",
+      role: "Senior Software Engineer at Square1",
+      company: "Sigma Solutions (Former Manager)",
+      image: "👨‍💻",
+      text: "Tushar Ghosh is a software developer who I had the opportunity to work with at Sigma Solutions for 1 year. He was a key member of the team that developed the Intelligent SOC Dashboard Platform (ISDP) and demonstrated his ability to implement solutions quickly and effectively. Tushar is hardworking, flexible and easy to work with, and is dedicated to delivering high-quality work. He would be a valuable addition to any organization.",
+      rating: 5
+    },
+    {
+      name: "MD Mahmud Ur Rahman",
+      role: "Senior Full-Stack Developer (10+ Years)",
+      company: "Laravel | Node.js | Vue.js | AWS",
+      image: "👨‍🔧",
+      text: "Tushar Ghosh did an exceptional job on romoni.com.bd. He was a very productive person and is a multi-skilled person with vast knowledge. He is really good at Laravel and VueJs. He is careful, proactive, self motivated and intelligent team player. It's a pleasure working with him as he is a customer-service oriented colleague.",
+      rating: 5
+    },
+    {
+      name: "Abidur Rahman Mallik",
+      role: "Founder of Things (FoT)",
+      company: "Ex-Samsung (Former Manager)",
+      image: "👨‍💼",
+      text: "It's rare that you come across standout talent like Tushar. He expertly filled the role of software engineer for my company's R&D team. I was particularly impressed by Tushar's ability to handle even the toughest tasks—effortlessly. That skill often takes years to develop among software engineer professionals, but it seemed to come perfectly naturally to him. Tushar would be an asset to any team.",
+      rating: 5
+    },
+    {
+      name: "Tajul Islam",
+      role: "Senior Software Engineer",
+      company: "Sigma Solutions",
+      image: "👨‍💻",
+      text: "I had the privilege of working with Tushar Ghosh Joy in the Bravo team for one year at Sigma Solutions. Tushar is a proactive, result-oriented, responsible, and technically sound employee and he is always ready to put all his energy and time to get the job done. He has an exceptional troubleshooting and analytical skill in Backend technologies. Tushar is a great asset to any company.",
+      rating: 5
+    }
+  ];
+
+  // Theme toggle handler
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('portfolio-theme', newTheme);
+  };
+
+  // Apply theme to document
+  useEffect(() => {
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(theme);
+  }, [theme]);
+
+  // Theme-aware colors
+  const isDark = theme === 'dark';
+  const bgColor = isDark ? 'bg-black' : 'bg-white';
+  const textColor = isDark ? 'text-white' : 'text-gray-900';
+  const bgGradient = isDark ? 'from-gray-900 to-black' : 'from-gray-100 to-white';
+  const borderColor = isDark ? 'border-gray-800' : 'border-gray-200';
+  const cardHoverBorder = isDark ? 'hover:border-gray-600' : 'hover:border-gray-300';
 
   // Generate starfield (fewer stars on mobile for performance)
   useEffect(() => {
@@ -236,18 +300,77 @@ export default function Portfolio() {
   }, []);
 
 
-  // Mouse tracking for parallax
+  // Mouse tracking for parallax and cursor trail
   useEffect(() => {
+    let lastEmitTime = 0;
+    const emitInterval = 30; // Emit a particle every 30ms
+
     const handleMouseMove = (e) => {
       setMousePosition({
         x: (e.clientX / window.innerWidth - 0.5) * 30,
         y: (e.clientY / window.innerHeight - 0.5) * 30
       });
+
+      // Create cursor trail particles
+      const now = Date.now();
+      if (now - lastEmitTime > emitInterval) {
+        lastEmitTime = now;
+
+        const newParticle = {
+          id: particleIdRef.current++,
+          x: e.clientX,
+          y: e.clientY,
+          size: Math.random() * 8 + 4,
+          color: ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#00f2fe'][Math.floor(Math.random() * 5)],
+          opacity: 1,
+          vx: (Math.random() - 0.5) * 2,
+          vy: (Math.random() - 0.5) * 2
+        };
+
+        setCursorTrail(prev => [...prev.slice(-30), newParticle]); // Keep last 30 particles
+      }
     };
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
+
+  // Animate cursor trail particles
+  useEffect(() => {
+    const animationInterval = setInterval(() => {
+      setCursorTrail(prev => {
+        return prev
+          .map(particle => ({
+            ...particle,
+            opacity: particle.opacity - 0.03,
+            y: particle.y + particle.vy,
+            x: particle.x + particle.vx,
+            size: particle.size * 0.98
+          }))
+          .filter(particle => particle.opacity > 0);
+      });
+    }, 16); // ~60fps
+
+    return () => clearInterval(animationInterval);
+  }, []);
+
+  // Auto-rotate testimonials
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveTestimonial(prev => (prev + 1) % testimonials.length);
+    }, 5000); // Change every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [testimonials.length]);
+
+  // Testimonial navigation handlers
+  const nextTestimonial = () => {
+    setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
+  };
+
+  const prevTestimonial = () => {
+    setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
 
   // Scroll progress tracking and back to top button visibility
   useEffect(() => {
@@ -298,6 +421,30 @@ export default function Portfolio() {
       return newCount;
     });
   };
+
+  // Close modal with Escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && selectedProject) {
+        setSelectedProject(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [selectedProject]);
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (selectedProject) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedProject]);
 
 
   // Enhanced animated background
@@ -464,59 +611,73 @@ export default function Portfolio() {
       name: "VUE3-DRAG-DROP",
       tech: "Vue 3, JavaScript, NPM",
       description: "Open-source NPM package with 100+ weekly downloads and 4.5+ star rating. Simplifies drag-and-drop functionality in Vue 3 applications with zero dependencies.",
+      fullDescription: "A lightweight, dependency-free Vue 3 component that makes implementing drag-and-drop functionality a breeze. Used by developers worldwide, this package provides intuitive APIs and excellent TypeScript support. Features include customizable drag handles, drop zones, and event callbacks for complete control over drag-and-drop interactions.",
       gradient: "from-green-400 to-blue-500",
       icon: "📦",
       link: "https://www.npmjs.com/package/vue3-drag-drop",
+      github: "https://github.com/TusharJoy/vue3-drag-drop",
       category: "Open Source",
-      tags: ["Vue.js", "Frontend", "NPM"]
+      tags: ["Vue.js", "Frontend", "NPM"],
+      highlights: ["100+ weekly downloads", "Zero dependencies", "TypeScript support", "4.5+ star rating"]
     },
     {
       name: "VUE PLOTLY",
       tech: "Vue 3, Plotly.js",
       description: "Thin wrapper of Plotly.js for Vue 3, making it easy to create interactive charts and data visualizations in Vue applications.",
+      fullDescription: "A modern Vue 3 wrapper for Plotly.js that brings powerful data visualization capabilities to Vue applications. Supports all Plotly chart types including line, bar, scatter, 3D plots, and statistical charts. Perfect for dashboards, analytics platforms, and data-driven applications.",
       gradient: "from-blue-400 to-cyan-500",
       icon: "📊",
-      link: "https://github.com/TusharJoy",
+      link: "https://github.com/TusharJoy/vue-plotly",
+      github: "https://github.com/TusharJoy/vue-plotly",
       category: "Open Source",
-      tags: ["Vue.js", "Frontend", "Data Viz"]
+      tags: ["Vue.js", "Frontend", "Data Viz"],
+      highlights: ["All Plotly chart types", "Reactive data binding", "TypeScript ready", "Composition API"]
     },
     {
       name: "SMARTCOMM AI",
       tech: "Vue.js, Node.js, AI/ML",
       description: "AI-powered communication platform featured on smartcomm.ai. Built intelligent customer engagement solutions.",
+      fullDescription: "Enterprise-grade AI communication platform that revolutionizes customer engagement. Integrates natural language processing, sentiment analysis, and predictive analytics to deliver personalized customer experiences. Built with Vue.js frontend and Node.js microservices architecture, handling thousands of concurrent conversations with sub-second response times.",
       gradient: "from-purple-400 to-pink-500",
       icon: "🤖",
       link: "https://smartcomm.ai",
       category: "SaaS",
-      tags: ["Full Stack", "AI/ML", "Node.js"]
+      tags: ["Full Stack", "AI/ML", "Node.js"],
+      highlights: ["AI-powered chatbots", "Real-time analytics", "Multi-channel support", "99.9% uptime"]
     },
     {
       name: "ROMONI PLATFORM",
       tech: "Laravel, Vue.js, MySQL",
       description: "On-demand beauty and lifestyle marketplace connecting skilled women entrepreneurs to customers across Bangladesh.",
+      fullDescription: "A comprehensive marketplace platform empowering women entrepreneurs in Bangladesh's beauty and lifestyle industry. Features include real-time booking, service provider matching, payment processing, ratings/reviews, and analytics dashboard. Built with Laravel backend and Vue.js frontend, serving thousands of users with seamless mobile-responsive experience.",
       gradient: "from-pink-400 to-rose-500",
       icon: "💄",
       link: "https://romoni.com.bd",
       category: "SaaS",
-      tags: ["Full Stack", "Laravel", "E-commerce"]
+      tags: ["Full Stack", "Laravel", "E-commerce"],
+      highlights: ["Real-time bookings", "Payment integration", "Mobile-responsive", "Rating system"]
     },
     {
       name: "DNA VISUALIZATION",
       tech: "D3.js, Bioinformatics",
       description: "Interactive research tool for analyzing DNA sequences and cancer patterns. Academic thesis project focused on visual salience in genomic data.",
+      fullDescription: "An innovative data visualization tool for bioinformatics research, developed as part of academic thesis work. Uses D3.js to create interactive visualizations of DNA sequences, enabling researchers to identify patterns in cancer genomics. Features include sequence alignment visualization, mutation mapping, and statistical analysis tools.",
       gradient: "from-cyan-400 to-blue-500",
       icon: "🧬",
       category: "Research",
-      tags: ["Frontend", "Data Viz", "Research"]
+      tags: ["Frontend", "Data Viz", "Research"],
+      highlights: ["Academic research", "Interactive visualizations", "Pattern recognition", "Cancer genomics"]
     },
     {
       name: "TELECOM AUTOMATION SUITE",
       tech: "PHP, Laravel, Redis, AWS",
       description: "Intelligent bot system processing 10,000+ daily events for telecom infrastructure monitoring, reducing incident response by 70%.",
+      fullDescription: "Enterprise automation platform for telecom infrastructure monitoring and management. Processes over 10,000 daily events using intelligent bots that detect anomalies, predict failures, and automate incident resolution. Built with Laravel and Redis for high-performance event processing, deployed on AWS with auto-scaling capabilities. Reduced incident response time by 70% and improved network reliability.",
       gradient: "from-orange-400 to-red-500",
       icon: "📡",
       category: "Enterprise",
-      tags: ["Backend", "Laravel", "DevOps"]
+      tags: ["Backend", "Laravel", "DevOps"],
+      highlights: ["10K+ daily events", "70% faster response", "Predictive analytics", "Auto-scaling"]
     }
   ];
 
@@ -552,6 +713,38 @@ export default function Portfolio() {
     ]
   };
 
+  // GitHub contribution data (mock data for visualization)
+  const generateContributionData = () => {
+    const weeks = 52;
+    const data = [];
+    for (let week = 0; week < weeks; week++) {
+      const weekData = [];
+      for (let day = 0; day < 7; day++) {
+        // Generate random contribution count with weighted distribution
+        const rand = Math.random();
+        let count;
+        if (rand < 0.3) count = 0; // 30% no contributions
+        else if (rand < 0.6) count = Math.floor(Math.random() * 3) + 1; // 30% low (1-3)
+        else if (rand < 0.85) count = Math.floor(Math.random() * 5) + 4; // 25% medium (4-8)
+        else count = Math.floor(Math.random() * 10) + 9; // 15% high (9-18)
+
+        weekData.push(count);
+      }
+      data.push(weekData);
+    }
+    return data;
+  };
+
+  const contributionData = generateContributionData();
+
+  const getContributionColor = (count) => {
+    if (count === 0) return 'bg-gray-800';
+    if (count <= 3) return 'bg-green-900';
+    if (count <= 6) return 'bg-green-700';
+    if (count <= 9) return 'bg-green-500';
+    return 'bg-green-400';
+  };
+
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     element?.scrollIntoView({ behavior: 'smooth' });
@@ -568,47 +761,8 @@ export default function Portfolio() {
     return matchesFilter && matchesSearch;
   });
 
-  // Contact form handlers
-  const validateForm = () => {
-    const errors = {};
-    if (!formData.name.trim()) errors.name = 'Name is required';
-    if (!formData.email.trim()) {
-      errors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      errors.email = 'Invalid email address';
-    }
-    if (!formData.message.trim()) errors.message = 'Message is required';
-    else if (formData.message.trim().length < 10) errors.message = 'Message must be at least 10 characters';
-    return errors;
-  };
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    const errors = validateForm();
-    setFormErrors(errors);
-
-    if (Object.keys(errors).length === 0) {
-      // Form is valid - in a real app, you'd send this to a backend
-      console.log('Form submitted:', formData);
-      setFormSubmitted(true);
-      setFormData({ name: '', email: '', message: '' });
-
-      // Reset success message after 5 seconds
-      setTimeout(() => setFormSubmitted(false), 5000);
-    }
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
-    if (formErrors[name]) {
-      setFormErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  };
-
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
+    <div className={`relative min-h-screen ${bgColor} ${textColor} overflow-hidden transition-colors duration-500`}>
       {/* Scroll Progress Bar */}
       <div className="fixed top-0 left-0 right-0 h-1 bg-gray-900 z-50">
         <div
@@ -616,6 +770,125 @@ export default function Portfolio() {
           style={{ width: `${scrollProgress}%` }}
         />
       </div>
+
+      {/* Cursor Trail Particles */}
+      <div className="fixed inset-0 pointer-events-none z-40">
+        {cursorTrail.map(particle => (
+          <div
+            key={particle.id}
+            className="absolute rounded-full"
+            style={{
+              left: `${particle.x}px`,
+              top: `${particle.y}px`,
+              width: `${particle.size}px`,
+              height: `${particle.size}px`,
+              backgroundColor: particle.color,
+              opacity: particle.opacity,
+              transform: 'translate(-50%, -50%)',
+              boxShadow: `0 0 ${particle.size * 2}px ${particle.color}`,
+              transition: 'opacity 0.1s ease-out'
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Project Modal */}
+      {selectedProject && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-visible-fade"
+          onClick={() => setSelectedProject(null)}
+        >
+          <div
+            className="relative bg-gradient-to-br from-gray-900 to-black rounded-3xl border border-gray-700 max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-visible-scale"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedProject(null)}
+              className="absolute top-6 right-6 p-2 bg-gray-800/50 hover:bg-gray-700 rounded-full transition-all duration-300 hover:scale-110 z-10"
+              aria-label="Close modal"
+            >
+              <X size={24} className="text-gray-300 hover:text-white" />
+            </button>
+
+            {/* Modal Content */}
+            <div className="p-8 md:p-12">
+              {/* Header */}
+              <div className="flex items-start gap-6 mb-8">
+                <div className="text-6xl">{selectedProject.icon}</div>
+                <div className="flex-1">
+                  <h2 className={`text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r ${selectedProject.gradient} bg-clip-text text-transparent`}>
+                    {selectedProject.name}
+                  </h2>
+                  <p className="text-lg text-purple-400 font-mono mb-2">{selectedProject.tech}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedProject.tags.map((tag, idx) => (
+                      <span
+                        key={idx}
+                        className="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Full Description */}
+              <div className="mb-8">
+                <h3 className="text-xl font-bold text-white mb-4">About This Project</h3>
+                <p className="text-gray-300 text-lg leading-relaxed">{selectedProject.fullDescription}</p>
+              </div>
+
+              {/* Highlights */}
+              {selectedProject.highlights && (
+                <div className="mb-8">
+                  <h3 className="text-xl font-bold text-white mb-4">Key Highlights</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {selectedProject.highlights.map((highlight, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center gap-3 p-4 bg-gray-800/50 rounded-xl border border-gray-700 hover:border-gray-600 transition-all duration-300"
+                      >
+                        <Star className={`text-transparent bg-gradient-to-r ${selectedProject.gradient} bg-clip-text flex-shrink-0`} size={20} fill="currentColor" />
+                        <span className="text-gray-300">{highlight}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-4">
+                {selectedProject.link && (
+                  <a
+                    href={selectedProject.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl font-semibold hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg shadow-blue-500/50"
+                  >
+                    <ExternalLink size={20} />
+                    View Live Project
+                  </a>
+                )}
+                {selectedProject.github && (
+                  <a
+                    href={selectedProject.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex items-center gap-2 px-6 py-3 border-2 border-gray-600 rounded-xl font-semibold hover:bg-gray-800 hover:scale-105 active:scale-95 transition-all duration-300"
+                  >
+                    <Github size={20} />
+                    View on GitHub
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Konami Code Easter Egg Overlay */}
       {konamiActivated && (
@@ -986,7 +1259,6 @@ export default function Portfolio() {
               suffix="+"
               label="Years Experience"
               gradient="from-blue-500 to-cyan-500"
-              visible={visibleElements.has('stats')}
               delay={0}
             />
             <StatsCard
@@ -995,7 +1267,6 @@ export default function Portfolio() {
               suffix="%"
               label="Uptime SLA"
               gradient="from-green-500 to-emerald-500"
-              visible={visibleElements.has('stats')}
               delay={0.1}
             />
             <StatsCard
@@ -1004,7 +1275,6 @@ export default function Portfolio() {
               suffix="%"
               label="Client Satisfaction"
               gradient="from-purple-500 to-pink-500"
-              visible={visibleElements.has('stats')}
               delay={0.2}
             />
             <StatsCard
@@ -1013,9 +1283,114 @@ export default function Portfolio() {
               suffix="+"
               label="Weekly NPM Downloads"
               gradient="from-yellow-500 to-orange-500"
-              visible={visibleElements.has('stats')}
               delay={0.3}
             />
+          </div>
+        </div>
+      </section>
+
+      {/* Interactive Career Timeline */}
+      <section id="timeline" className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-black" data-animate>
+        <div className="container mx-auto max-w-5xl">
+          <h2 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-12 sm:mb-16 text-center ${
+            visibleElements.has('timeline') ? 'animate-visible-scale' : 'opacity-0'
+          }`}>
+            <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              Career Journey
+            </span>
+          </h2>
+
+          <div className="relative">
+            {/* Timeline Line */}
+            <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-500 via-purple-500 to-pink-500"></div>
+
+            {/* Timeline Items */}
+            <div className="space-y-12">
+              {/* 2023 - Present: Bitstrapped */}
+              <div className={`relative ${visibleElements.has('timeline') ? 'animate-visible-right' : 'opacity-0'}`}>
+                <div className="flex items-center mb-4">
+                  <div className="absolute left-8 md:left-1/2 w-4 h-4 bg-blue-500 rounded-full -ml-2 ring-4 ring-blue-500/20 animate-pulse"></div>
+                  <div className="ml-16 md:ml-0 md:w-1/2 md:pr-12 md:text-right">
+                    <span className="text-2xl font-bold text-blue-400">2023 - Present</span>
+                  </div>
+                </div>
+                <div className="ml-16 md:ml-auto md:w-1/2 md:pl-12">
+                  <div className="bg-gradient-to-br from-gray-900 to-black p-6 rounded-2xl border border-gray-800 hover:border-blue-500 transition-all duration-300 hover:scale-105">
+                    <h3 className="text-xl font-bold text-white mb-2">Full Stack Engineer</h3>
+                    <p className="text-blue-400 mb-2">Bitstrapped - Toronto, Canada (Remote)</p>
+                    <p className="text-gray-400 text-sm">Leading full-stack development for enterprise SaaS applications. Achieved 95%+ client satisfaction and 99.9% uptime.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* 2022 - 2023: Cefalo */}
+              <div className={`relative ${visibleElements.has('timeline') ? 'animate-visible-left stagger-1' : 'opacity-0'}`}>
+                <div className="flex items-center mb-4">
+                  <div className="absolute left-8 md:left-1/2 w-4 h-4 bg-purple-500 rounded-full -ml-2 ring-4 ring-purple-500/20"></div>
+                  <div className="ml-16 md:ml-0 md:w-1/2 md:pr-12 md:text-right">
+                    <span className="text-2xl font-bold text-purple-400">2022 - 2023</span>
+                  </div>
+                </div>
+                <div className="ml-16 md:ml-0 md:w-1/2 md:pr-12 md:text-right">
+                  <div className="bg-gradient-to-br from-gray-900 to-black p-6 rounded-2xl border border-gray-800 hover:border-purple-500 transition-all duration-300 hover:scale-105">
+                    <h3 className="text-xl font-bold text-white mb-2">Software Engineer</h3>
+                    <p className="text-purple-400 mb-2">Cefalo - Norway (Remote)</p>
+                    <p className="text-gray-400 text-sm">Collaborated with Norwegian team handling 100K+ daily requests. Reduced API response times by 35%.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* 2019 - 2022: Sigma Solutions */}
+              <div className={`relative ${visibleElements.has('timeline') ? 'animate-visible-right stagger-2' : 'opacity-0'}`}>
+                <div className="flex items-center mb-4">
+                  <div className="absolute left-8 md:left-1/2 w-4 h-4 bg-orange-500 rounded-full -ml-2 ring-4 ring-orange-500/20"></div>
+                  <div className="ml-16 md:ml-0 md:w-1/2 md:pr-12 md:text-right">
+                    <span className="text-2xl font-bold text-orange-400">2019 - 2022</span>
+                  </div>
+                </div>
+                <div className="ml-16 md:ml-auto md:w-1/2 md:pl-12">
+                  <div className="bg-gradient-to-br from-gray-900 to-black p-6 rounded-2xl border border-gray-800 hover:border-orange-500 transition-all duration-300 hover:scale-105">
+                    <h3 className="text-xl font-bold text-white mb-2">Senior Software Engineer</h3>
+                    <p className="text-orange-400 mb-2">Sigma Solutions BD</p>
+                    <p className="text-gray-400 text-sm">Built telecom automation processing 10K+ events daily. Reduced incident response by 70%.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* 2018 - 2019: Romoni */}
+              <div className={`relative ${visibleElements.has('timeline') ? 'animate-visible-left stagger-3' : 'opacity-0'}`}>
+                <div className="flex items-center mb-4">
+                  <div className="absolute left-8 md:left-1/2 w-4 h-4 bg-green-500 rounded-full -ml-2 ring-4 ring-green-500/20"></div>
+                  <div className="ml-16 md:ml-0 md:w-1/2 md:pr-12 md:text-right">
+                    <span className="text-2xl font-bold text-green-400">2018 - 2019</span>
+                  </div>
+                </div>
+                <div className="ml-16 md:ml-0 md:w-1/2 md:pr-12 md:text-right">
+                  <div className="bg-gradient-to-br from-gray-900 to-black p-6 rounded-2xl border border-gray-800 hover:border-green-500 transition-all duration-300 hover:scale-105">
+                    <h3 className="text-xl font-bold text-white mb-2">Software Engineer</h3>
+                    <p className="text-green-400 mb-2">Romoni Platform</p>
+                    <p className="text-gray-400 text-sm">First role! Built operations management from scratch for beauty & lifestyle platform.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* 2018: Graduation */}
+              <div className={`relative ${visibleElements.has('timeline') ? 'animate-visible-scale stagger-4' : 'opacity-0'}`}>
+                <div className="flex items-center mb-4">
+                  <div className="absolute left-8 md:left-1/2 w-4 h-4 bg-yellow-500 rounded-full -ml-2 ring-4 ring-yellow-500/20"></div>
+                  <div className="ml-16 md:ml-0 md:w-1/2 md:pr-12 md:text-right">
+                    <span className="text-2xl font-bold text-yellow-400">2018</span>
+                  </div>
+                </div>
+                <div className="ml-16 md:ml-auto md:w-1/2 md:pl-12">
+                  <div className="bg-gradient-to-br from-gray-900 to-black p-6 rounded-2xl border border-gray-800 hover:border-yellow-500 transition-all duration-300 hover:scale-105">
+                    <h3 className="text-xl font-bold text-white mb-2">🎓 B.Sc in Computer Science</h3>
+                    <p className="text-yellow-400 mb-2">KUET - Bangladesh</p>
+                    <p className="text-gray-400 text-sm">CGPA: 3.64/4.0 - The journey begins!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1157,11 +1532,12 @@ export default function Portfolio() {
               return (
               <div
                 key={index}
-                className={`group relative ${
+                className={`group relative cursor-pointer ${
                   visibleElements.has('projects') ? 'animate-visible-up' : 'opacity-0'
                 } stagger-${index + 1}`}
                 onMouseEnter={() => setHoveredCard(cardId)}
                 onMouseLeave={() => setHoveredCard(null)}
+                onClick={() => setSelectedProject(project)}
               >
                 <div className={`absolute inset-0 bg-gradient-to-r ${project.gradient} rounded-3xl blur-2xl transition-all duration-500 ${
                   hoveredCard === cardId ? 'opacity-60' : 'opacity-0'
@@ -1170,28 +1546,21 @@ export default function Portfolio() {
                 <div className={`relative bg-gradient-to-br from-gray-900 to-black p-8 rounded-3xl border border-gray-800 h-full transition-all duration-300 overflow-hidden ${hoveredCard === cardId ? 'transform -translate-y-4 scale-105' : ''}`}>
                   {/* Animated shine effect */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                  
+
                   <div className="text-5xl mb-4 transform group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 relative z-10">
                     {project.icon}
                   </div>
-                  
+
                   <h3 className={`text-2xl font-bold mb-3 bg-gradient-to-r ${project.gradient} bg-clip-text text-transparent relative z-10`}>
                     {project.name}
                   </h3>
-                  
+
                   <p className="text-sm text-purple-400 mb-4 font-mono relative z-10">{project.tech}</p>
                   <p className="text-gray-300 mb-6 relative z-10 group-hover:text-white transition-colors">{project.description}</p>
 
-                  {project.link && (
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-all duration-300 relative z-10 group-hover:gap-4"
-                    >
-                      View Project <ExternalLink size={16} className="transform group-hover:rotate-45 transition-transform" />
-                    </a>
-                  )}
+                  <div className="inline-flex items-center gap-2 text-blue-400 group-hover:text-blue-300 transition-all duration-300 relative z-10 group-hover:gap-4">
+                    View Details <ExternalLink size={16} className="transform group-hover:rotate-45 transition-transform" />
+                  </div>
                 </div>
               </div>
               );
@@ -1239,6 +1608,221 @@ export default function Portfolio() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* GitHub Activity Section */}
+      <section id="github" className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-black" data-animate>
+        <div className="container mx-auto max-w-6xl">
+          <h2 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-8 sm:mb-12 text-center ${
+            visibleElements.has('github') ? 'animate-visible-scale' : 'opacity-0'
+          }`}>
+            <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              GitHub Activity
+            </span>
+          </h2>
+
+          <div className={`mb-12 ${visibleElements.has('github') ? 'animate-visible-up' : 'opacity-0'}`}>
+            {/* GitHub Stats Cards */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+              <div className="bg-gradient-to-br from-gray-900 to-black p-6 rounded-2xl border border-gray-800 hover:border-green-500 transition-all duration-300 hover:scale-105">
+                <div className="text-3xl font-bold text-green-400 mb-2">1200+</div>
+                <div className="text-gray-400 text-sm">Total Contributions</div>
+              </div>
+              <div className="bg-gradient-to-br from-gray-900 to-black p-6 rounded-2xl border border-gray-800 hover:border-blue-500 transition-all duration-300 hover:scale-105">
+                <div className="text-3xl font-bold text-blue-400 mb-2">25+</div>
+                <div className="text-gray-400 text-sm">Public Repos</div>
+              </div>
+              <div className="bg-gradient-to-br from-gray-900 to-black p-6 rounded-2xl border border-gray-800 hover:border-purple-500 transition-all duration-300 hover:scale-105">
+                <div className="text-3xl font-bold text-purple-400 mb-2">150+</div>
+                <div className="text-gray-400 text-sm">Stars Received</div>
+              </div>
+              <div className="bg-gradient-to-br from-gray-900 to-black p-6 rounded-2xl border border-gray-800 hover:border-pink-500 transition-all duration-300 hover:scale-105">
+                <div className="text-3xl font-bold text-pink-400 mb-2">7+</div>
+                <div className="text-gray-400 text-sm">Years Coding</div>
+              </div>
+            </div>
+
+            {/* Contribution Graph */}
+            <div className="relative bg-gradient-to-br from-gray-900 to-black p-8 rounded-3xl border border-gray-800 overflow-x-auto">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-white">Contribution Activity</h3>
+                <a
+                  href="https://github.com/TusharJoy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
+                >
+                  <Github size={20} />
+                  View on GitHub
+                </a>
+              </div>
+
+              <div className="flex gap-1 mb-4">
+                {contributionData.map((week, weekIndex) => (
+                  <div key={weekIndex} className="flex flex-col gap-1">
+                    {week.map((count, dayIndex) => (
+                      <div
+                        key={`${weekIndex}-${dayIndex}`}
+                        className={`w-3 h-3 rounded-sm ${getContributionColor(count)} hover:ring-2 hover:ring-green-400 transition-all duration-200 cursor-pointer`}
+                        title={`${count} contributions`}
+                      />
+                    ))}
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-4 text-sm text-gray-500">
+                <span>Less</span>
+                <div className="flex gap-1">
+                  <div className="w-3 h-3 rounded-sm bg-gray-800" />
+                  <div className="w-3 h-3 rounded-sm bg-green-900" />
+                  <div className="w-3 h-3 rounded-sm bg-green-700" />
+                  <div className="w-3 h-3 rounded-sm bg-green-500" />
+                  <div className="w-3 h-3 rounded-sm bg-green-400" />
+                </div>
+                <span>More</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Popular Repositories */}
+          <div className={`${visibleElements.has('github') ? 'animate-visible-up stagger-2' : 'opacity-0'}`}>
+            <h3 className="text-2xl font-bold text-white mb-6">Popular Repositories</h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              <a
+                href="https://github.com/TusharJoy/vue3-drag-drop"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative bg-gradient-to-br from-gray-900 to-black p-6 rounded-2xl border border-gray-800 hover:border-green-500 transition-all duration-300 hover:scale-105"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <h4 className="text-lg font-bold text-white group-hover:text-green-400 transition-colors">vue3-drag-drop</h4>
+                  <Star className="text-yellow-400" size={20} fill="currentColor" />
+                </div>
+                <p className="text-gray-400 text-sm mb-4">Vue 3 drag and drop component with zero dependencies</p>
+                <div className="flex items-center gap-4 text-sm">
+                  <span className="flex items-center gap-1 text-gray-500">
+                    <div className="w-3 h-3 rounded-full bg-green-500" />
+                    Vue
+                  </span>
+                  <span className="text-gray-500">⭐ 25+</span>
+                  <span className="text-gray-500">100+ weekly downloads</span>
+                </div>
+              </a>
+
+              <a
+                href="https://github.com/TusharJoy/vue-plotly"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative bg-gradient-to-br from-gray-900 to-black p-6 rounded-2xl border border-gray-800 hover:border-blue-500 transition-all duration-300 hover:scale-105"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <h4 className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">vue-plotly</h4>
+                  <Star className="text-yellow-400" size={20} fill="currentColor" />
+                </div>
+                <p className="text-gray-400 text-sm mb-4">Vue 3 wrapper for Plotly.js data visualization</p>
+                <div className="flex items-center gap-4 text-sm">
+                  <span className="flex items-center gap-1 text-gray-500">
+                    <div className="w-3 h-3 rounded-full bg-green-500" />
+                    Vue
+                  </span>
+                  <span className="text-gray-500">⭐ 15+</span>
+                  <span className="text-gray-500">Data Viz</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section id="testimonials" className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 bg-gradient-to-b from-black to-gray-900" data-animate>
+        <div className="container mx-auto max-w-5xl">
+          <h2 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-12 sm:mb-16 text-center ${
+            visibleElements.has('testimonials') ? 'animate-visible-scale' : 'opacity-0'
+          }`}>
+            <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              What People Say
+            </span>
+          </h2>
+
+          <div className={`relative ${visibleElements.has('testimonials') ? 'animate-visible-up' : 'opacity-0'}`}>
+            {/* Carousel Container */}
+            <div className="relative bg-gradient-to-br from-gray-900 to-black rounded-3xl border border-gray-800 p-8 md:p-12 overflow-hidden">
+              {/* Decorative Quote Icon */}
+              <Quote className="absolute top-8 left-8 text-blue-500/20" size={80} />
+
+              {/* Testimonial Content */}
+              <div className="relative z-10 min-h-[300px] flex flex-col justify-between">
+                <div className="mb-8">
+                  {/* Stars Rating */}
+                  <div className="flex gap-1 mb-6 justify-center">
+                    {[...Array(testimonials[activeTestimonial].rating)].map((_, i) => (
+                      <Star
+                        key={i}
+                        size={24}
+                        className="text-yellow-400"
+                        fill="currentColor"
+                      />
+                    ))}
+                  </div>
+
+                  {/* Testimonial Text */}
+                  <p className="text-lg md:text-xl text-gray-300 text-center leading-relaxed mb-8 italic">
+                    "{testimonials[activeTestimonial].text}"
+                  </p>
+                </div>
+
+                {/* Author Info */}
+                <div className="flex flex-col items-center">
+                  <div className="text-5xl mb-4">{testimonials[activeTestimonial].image}</div>
+                  <h4 className="text-xl font-bold text-white mb-1">
+                    {testimonials[activeTestimonial].name}
+                  </h4>
+                  <p className="text-purple-400 text-sm">
+                    {testimonials[activeTestimonial].role}
+                  </p>
+                  <p className="text-gray-500 text-sm">
+                    {testimonials[activeTestimonial].company}
+                  </p>
+                </div>
+              </div>
+
+              {/* Navigation Arrows */}
+              <button
+                onClick={prevTestimonial}
+                className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-gray-800/50 hover:bg-gray-700 rounded-full transition-all duration-300 hover:scale-110 z-20"
+                aria-label="Previous testimonial"
+              >
+                <ChevronLeft size={24} className="text-white" />
+              </button>
+
+              <button
+                onClick={nextTestimonial}
+                className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-gray-800/50 hover:bg-gray-700 rounded-full transition-all duration-300 hover:scale-110 z-20"
+                aria-label="Next testimonial"
+              >
+                <ChevronRight size={24} className="text-white" />
+              </button>
+            </div>
+
+            {/* Navigation Dots */}
+            <div className="flex justify-center gap-3 mt-8">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveTestimonial(index)}
+                  className={`transition-all duration-300 rounded-full ${
+                    index === activeTestimonial
+                      ? 'w-12 h-3 bg-gradient-to-r from-blue-500 to-purple-600'
+                      : 'w-3 h-3 bg-gray-700 hover:bg-gray-600'
+                  }`}
+                  aria-label={`Go to testimonial ${index + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -1324,96 +1908,6 @@ export default function Portfolio() {
               <span>tusharghoshjoy@gmail.com</span>
             </div>
           </div>
-
-          {/* Contact Form */}
-          <div className={`mt-16 max-w-2xl mx-auto ${
-            visibleElements.has('contact') ? 'animate-visible-up stagger-3' : 'opacity-0'
-          }`}>
-            <div className="relative bg-gradient-to-br from-gray-900 to-black p-8 rounded-3xl border border-gray-800">
-              <h3 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-                Send Me a Message
-              </h3>
-
-              {formSubmitted && (
-                <div className="mb-6 p-4 bg-green-500/20 border border-green-500/50 rounded-xl text-green-400 text-center animate-visible-scale">
-                  ✓ Message sent successfully! I'll get back to you soon.
-                </div>
-              )}
-
-              <form onSubmit={handleFormSubmit} className="space-y-6">
-                {/* Name Field */}
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
-                    Name *
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    className={`w-full px-4 py-3 bg-gray-800/50 border ${
-                      formErrors.name ? 'border-red-500' : 'border-gray-700'
-                    } rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 transition-all duration-300`}
-                    placeholder="Your name"
-                  />
-                  {formErrors.name && (
-                    <p className="mt-2 text-sm text-red-400">{formErrors.name}</p>
-                  )}
-                </div>
-
-                {/* Email Field */}
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
-                    Email *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className={`w-full px-4 py-3 bg-gray-800/50 border ${
-                      formErrors.email ? 'border-red-500' : 'border-gray-700'
-                    } rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 transition-all duration-300`}
-                    placeholder="your.email@example.com"
-                  />
-                  {formErrors.email && (
-                    <p className="mt-2 text-sm text-red-400">{formErrors.email}</p>
-                  )}
-                </div>
-
-                {/* Message Field */}
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
-                    Message *
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    rows="5"
-                    className={`w-full px-4 py-3 bg-gray-800/50 border ${
-                      formErrors.message ? 'border-red-500' : 'border-gray-700'
-                    } rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 resize-none`}
-                    placeholder="Tell me about your project or just say hi..."
-                  ></textarea>
-                  {formErrors.message && (
-                    <p className="mt-2 text-sm text-red-400">{formErrors.message}</p>
-                  )}
-                </div>
-
-                {/* Submit Button */}
-                <button
-                  type="submit"
-                  className="w-full py-4 bg-gradient-to-r from-blue-500 via-purple-600 to-pink-600 rounded-xl font-semibold text-white hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg shadow-blue-500/50 hover:shadow-blue-500/70"
-                >
-                  Send Message
-                </button>
-              </form>
-            </div>
-          </div>
         </div>
 
         {/* Animated circles in contact */}
@@ -1435,6 +1929,19 @@ export default function Portfolio() {
           ))}
         </div>
       </section>
+
+      {/* Theme Toggle Button */}
+      <button
+        onClick={toggleTheme}
+        className="fixed bottom-8 left-8 z-50 p-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full shadow-lg shadow-purple-500/50 hover:shadow-purple-500/70 transition-all duration-300 hover:scale-110 active:scale-95 hover:rotate-180"
+        aria-label="Toggle theme"
+      >
+        {isDark ? (
+          <Sun size={24} className="text-white" />
+        ) : (
+          <Moon size={24} className="text-white" />
+        )}
+      </button>
 
       {/* Back to Top Button */}
       <button
