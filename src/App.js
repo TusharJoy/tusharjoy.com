@@ -101,14 +101,17 @@ function HeroParticles({ containerRef }) {
     const container = containerRef.current;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, alpha: true, antialias: true });
+    // Optimize: disable antialiasing on mobile for better performance
+    const isMobile = window.innerWidth < 768;
+    const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, alpha: true, antialias: !isMobile });
 
     renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Optimize: use lower pixel ratio for better performance
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1 : 1.5));
     camera.position.z = 50;
 
-    // Particles
-    const particleCount = 80;
+    // Particles - reduced count for better performance
+    const particleCount = isMobile ? 40 : 80;
     const particles = [];
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
@@ -162,17 +165,22 @@ function SkillsShapes({ containerRef }) {
     const container = containerRef.current;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, alpha: true, antialias: true });
+    // Optimize: disable antialiasing on mobile for better performance
+    const isMobile = window.innerWidth < 768;
+    const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, alpha: true, antialias: !isMobile });
 
     renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Optimize: use lower pixel ratio for better performance
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1 : 1.5));
     camera.position.z = 8;
 
     const shapes = [];
+    // Optimize: reduce geometry segments on mobile
+    const segments = isMobile ? 8 : 16;
     const geometries = [
       new THREE.BoxGeometry(0.5, 0.5, 0.5),
-      new THREE.SphereGeometry(0.3, 16, 16),
-      new THREE.TorusGeometry(0.3, 0.1, 16, 100),
+      new THREE.SphereGeometry(0.3, segments, segments),
+      new THREE.TorusGeometry(0.3, 0.1, segments, isMobile ? 50 : 100),
       new THREE.OctahedronGeometry(0.3)
     ];
 
@@ -224,13 +232,18 @@ function ProjectsGlobe({ containerRef }) {
     const container = containerRef.current;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, alpha: true, antialias: true });
+    // Optimize: disable antialiasing on mobile for better performance
+    const isMobile = window.innerWidth < 768;
+    const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, alpha: true, antialias: !isMobile });
 
     renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Optimize: use lower pixel ratio for better performance
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1 : 1.5));
     camera.position.z = 3;
 
-    const globeGeometry = new THREE.SphereGeometry(1.5, 32, 32);
+    // Optimize: reduce globe segments on mobile
+    const globeSegments = isMobile ? 16 : 32;
+    const globeGeometry = new THREE.SphereGeometry(1.5, globeSegments, globeSegments);
     const globeMaterial = new THREE.MeshBasicMaterial({ color: 0x667eea, wireframe: true, transparent: true, opacity: 0.2 });
     const globe = new THREE.Mesh(globeGeometry, globeMaterial);
     scene.add(globe);
@@ -1604,6 +1617,8 @@ export default function Portfolio() {
                         src={exp.logo}
                         alt={`${exp.company} logo`}
                         className="w-full h-full object-contain"
+                        loading="lazy"
+                        decoding="async"
                       />
                     </div>
 

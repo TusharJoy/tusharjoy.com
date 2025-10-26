@@ -1,0 +1,55 @@
+# Enable caching for static assets
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # Images
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+
+  # CSS and JavaScript
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 month"
+
+  # PDFs
+  ExpiresByType application/pdf "access plus 1 month"
+
+  # Web fonts
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType font/ttf "access plus 1 year"
+
+  # Default
+  ExpiresDefault "access plus 1 week"
+</IfModule>
+
+# Add cache-control headers
+<IfModule mod_headers.c>
+  <FilesMatch "\.(jpg|jpeg|png|gif|svg|ico|pdf|woff|woff2|ttf)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  <FilesMatch "\.(css|js)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# Enable compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE text/xml
+  AddOutputFilterByType DEFLATE text/plain
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/x-javascript
+  AddOutputFilterByType DEFLATE application/json
+  AddOutputFilterByType DEFLATE application/xml
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
