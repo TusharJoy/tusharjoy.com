@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Github, Linkedin, Mail, Phone, ExternalLink, Code, GraduationCap, ChevronDown, Terminal, Sparkles, Zap, Rocket, Star, TrendingUp, Award, Users, Download, ArrowUp, FileDown, X, Moon, Sun, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import { Github, Linkedin, Mail, Phone, ExternalLink, Code, GraduationCap, ChevronDown, Terminal, Sparkles, Zap, Rocket, Star, TrendingUp, Award, Users, Download, ArrowUp, FileDown, X, Moon, Sun, ChevronLeft, ChevronRight, Quote, MessageCircle } from 'lucide-react';
 import * as THREE from 'three';
 
 // Skill Bar Component with Animation
@@ -2055,30 +2055,29 @@ export default function Portfolio() {
               LinkedIn
             </a>
 
-            <button
-              onClick={() => {
-                // For now, this will just trigger a download
-                // User can replace with actual resume file
-                const link = document.createElement('a');
-                link.href = '#'; // Replace with actual resume PDF path
-                link.download = 'Tushar_Ghosh_Joy_Resume.pdf';
-                alert('Please add your resume PDF to the public folder and update the link!');
-                // link.click(); // Uncomment when resume is added
-              }}
+            <a
+              href="https://wa.me/8801303412012"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-8 py-4 border-2 border-green-500 rounded-full font-semibold hover:bg-green-500/20 transition-all duration-300 flex items-center gap-2 hover:scale-110 hover:border-green-400 hover:shadow-lg hover:shadow-green-500/50"
+            >
+              <MessageCircle size={20} className="transform hover:rotate-12 transition-transform" />
+              WhatsApp
+            </a>
+
+            <a
+              href="/Tushar_Ghosh_Joy_Resume.pdf"
+              download="Tushar_Ghosh_Joy_Resume.pdf"
               className="px-8 py-4 border-2 border-green-500 rounded-full font-semibold hover:bg-green-500/20 transition-all duration-300 flex items-center gap-2 hover:scale-110 hover:border-green-400 hover:shadow-lg hover:shadow-green-500/50"
             >
               <FileDown size={20} className="transform hover:-translate-y-1 transition-transform" />
               Download Resume
-            </button>
+            </a>
           </div>
           
           <div className={`flex flex-col items-center gap-4 text-gray-400 ${
             visibleElements.has('contact') ? 'animate-visible-fade stagger-2' : 'opacity-0'
           }`}>
-            <div className="flex items-center gap-2 hover:text-white transition-colors duration-300 hover:scale-110">
-              <Phone size={18} className="animate-pulse" />
-              <span>+880 1329 521150</span>
-            </div>
             <div className="flex items-center gap-2 hover:text-white transition-colors duration-300 hover:scale-110">
               <Mail size={18} className="animate-pulse" />
               <span>tusharghoshjoy@gmail.com</span>
