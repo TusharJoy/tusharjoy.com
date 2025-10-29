@@ -2070,24 +2070,6 @@ export default function Portfolio() {
               LinkedIn
             </a>
 
-            <a
-              href="https://wa.me/8801303412012"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-4 border-2 border-green-500 rounded-full font-semibold hover:bg-green-500/20 transition-all duration-300 flex items-center gap-2 hover:scale-110 hover:border-green-400 hover:shadow-lg hover:shadow-green-500/50"
-            >
-              <MessageCircle size={20} className="transform hover:rotate-12 transition-transform" />
-              WhatsApp
-            </a>
-
-            <a
-              href="/Tushar_Ghosh_Joy_Resume.pdf"
-              download="Tushar_Ghosh_Joy_Resume.pdf"
-              className="px-8 py-4 border-2 border-green-500 rounded-full font-semibold hover:bg-green-500/20 transition-all duration-300 flex items-center gap-2 hover:scale-110 hover:border-green-400 hover:shadow-lg hover:shadow-green-500/50"
-            >
-              <FileDown size={20} className="transform hover:-translate-y-1 transition-transform" />
-              Download Resume
-            </a>
           </div>
           
           <div className={`flex flex-col items-center gap-4 text-gray-400 ${
