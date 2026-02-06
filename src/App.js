@@ -62,7 +62,7 @@ function Portfolio() {
     github: "https://github.com/TusharJoy",
     linkedin: "https://linkedin.com/in/tusharghoshjoy",
     resume: "/Tushar_Ghosh_Joy_Resume.pdf",
-    calendarBooking: "https://calendar.app.google/xFQfAUATMwCWkrEH7"
+    calendarBooking: "https://calendar.app.google/DvsZw4vBCzBg4Py69"
   };
 
   const expertise = [
