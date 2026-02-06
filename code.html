@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tushar Joy | Professional Portfolio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#18181b", // Zinc 900
+                        "background-light": "#ffffff",
+                        "background-dark": "#09090b",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .hero-gradient {
+            background: radial-gradient(circle at top right, rgba(24, 24, 27, 0.05), transparent);
+        }
+        .dark .hero-gradient {
+            background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.05), transparent);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-zinc-900 dark:text-zinc-100 transition-colors duration-300">
+<nav class="sticky top-0 z-50 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800">
+<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+<span class="text-white font-bold text-lg">T</span>
+</div>
+<span class="text-xl font-bold tracking-tight">Tushar Joy</span>
+</div>
+<div class="hidden md:flex items-center gap-8 text-sm font-medium">
+<a class="hover:text-zinc-500 transition-colors" href="#services">Services</a>
+<a class="hover:text-zinc-500 transition-colors" href="#work">Portfolio</a>
+<a class="hover:text-zinc-500 transition-colors" href="#process">Process</a>
+<a class="hover:text-zinc-500 transition-colors" href="#testimonials">Testimonials</a>
+<a class="px-5 py-2.5 bg-primary text-white rounded-full hover:opacity-90 transition-opacity" href="#contact">Book a Call</a>
+</div>
+<button class="md:hidden">
+<span class="material-icons">menu</span>
+</button>
+</div>
+</nav>
+<section class="relative pt-24 pb-32 overflow-hidden hero-gradient">
+<div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+<div class="space-y-8">
+<span class="inline-block px-4 py-1.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-xs font-semibold uppercase tracking-widest text-zinc-600 dark:text-zinc-400">
+                    Available for New Projects
+                </span>
+<h1 class="text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1]">
+                    I Engineer Digital <span class="text-zinc-400">Experiences</span> That Drive Results
+                </h1>
+<p class="text-xl text-zinc-600 dark:text-zinc-400 max-w-lg leading-relaxed">
+                    Full-stack developer and UI/UX strategist specializing in building high-performance web applications that convert users into customers.
+                </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<a class="px-8 py-4 bg-primary text-white font-semibold rounded-lg flex items-center justify-center gap-2 hover:translate-y-[-2px] transition-transform" href="#work">
+                        View Selected Works
+                        <span class="material-icons text-lg">arrow_outward</span>
+</a>
+<a class="px-8 py-4 border border-zinc-200 dark:border-zinc-800 font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors" href="#contact">
+                        My Approach
+                    </a>
+</div>
+<div class="pt-8 flex items-center gap-4 text-sm text-zinc-500">
+<p>Trusted by world-class teams:</p>
+<div class="flex gap-6 grayscale opacity-60">
+<span class="font-bold">STRIPE</span>
+<span class="font-bold">LINEAR</span>
+<span class="font-bold">VERCEL</span>
+</div>
+</div>
+</div>
+<div class="relative">
+<div class="bg-zinc-100 dark:bg-zinc-900 rounded-3xl p-4 aspect-square flex items-center justify-center">
+<img alt="Code interface on dark background" class="rounded-2xl shadow-2xl object-cover h-full w-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOhx_tgkDzLTgIFH3f5ptLhWKnJftWxLR64RSJkdVLdvNUDQeQrnwtvtP9oCTFnMTh_Ytb4b6xlVXi4jvWn30Mn9gRP4-DT7_1aXj0HhIUDuVKZfayPQXWAFsy70PsRv_tHQG4d_9chOpG2RSeuX0hbg1Eg4EWiIjpRU4Eh43Xfl8CyqB6gpzjmI86JDA6FJLnxlVsSzy_LIdFVObuOjO3OfA5kJpPcqnPC3Tn1qp7bXP3lCZeG17gJY9OyYmyQjYhk92j5l6Qg8w"/>
+</div>
+<div class="absolute -bottom-6 -left-6 bg-white dark:bg-zinc-800 p-6 rounded-2xl shadow-xl border border-zinc-100 dark:border-zinc-700 hidden sm:block">
+<div class="flex items-center gap-4">
+<div class="bg-green-100 dark:bg-green-900/30 p-2 rounded-full">
+<span class="material-icons text-green-600">trending_up</span>
+</div>
+<div>
+<p class="text-sm text-zinc-500">Uptime Rate</p>
+<p class="text-xl font-bold">99.9%</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 bg-zinc-50 dark:bg-zinc-900/50" id="services">
+<div class="max-w-7xl mx-auto px-6">
+<div class="mb-16">
+<h2 class="text-4xl font-bold mb-4">Core Expertise</h2>
+<p class="text-zinc-600 dark:text-zinc-400">Specialized solutions for modern digital problems.</p>
+</div>
+<div class="grid md:grid-cols-3 gap-8">
+<div class="bg-white dark:bg-zinc-900 p-10 rounded-3xl border border-zinc-100 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-600 transition-colors group">
+<div class="w-14 h-14 bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-icons text-3xl">developer_mode</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">Web Development</h3>
+<p class="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                        Custom web applications built with React, Next.js, and Node.js. Scalable, performant, and secure by default.
+                    </p>
+</div>
+<div class="bg-white dark:bg-zinc-900 p-10 rounded-3xl border border-zinc-100 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-600 transition-colors group">
+<div class="w-14 h-14 bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-icons text-3xl">token</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">UI/UX Design</h3>
+<p class="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                        User-centric interface design that doesn't just look beautiful but solves complex usability challenges.
+                    </p>
+</div>
+<div class="bg-white dark:bg-zinc-900 p-10 rounded-3xl border border-zinc-100 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-600 transition-colors group">
+<div class="w-14 h-14 bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-icons text-3xl">insights</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">Product Strategy</h3>
+<p class="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                        Bridging the gap between business goals and technical execution through data-driven planning and auditing.
+                    </p>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 border-t border-zinc-100 dark:border-zinc-800" id="process">
+<div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-20 items-center">
+<div>
+<h2 class="text-4xl font-bold mb-8 leading-tight">A Proven Process For<br/>Repeatable Success</h2>
+<div class="space-y-4">
+<div class="border-b border-zinc-100 dark:border-zinc-800 pb-4">
+<button class="flex items-center justify-between w-full py-4 text-left font-bold text-xl group">
+<span>01. Discovery &amp; Audit</span>
+<span class="material-icons text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white">expand_more</span>
+</button>
+<p class="text-zinc-600 dark:text-zinc-400 mt-2 mb-4 leading-relaxed">
+                            We start by understanding your business goals, target audience, and current pain points to create a tailored roadmap.
+                        </p>
+</div>
+<div class="border-b border-zinc-100 dark:border-zinc-800 pb-4">
+<button class="flex items-center justify-between w-full py-4 text-left font-bold text-xl group">
+<span>02. Architecture &amp; Design</span>
+<span class="material-icons text-zinc-400">add</span>
+</button>
+</div>
+<div class="border-b border-zinc-100 dark:border-zinc-800 pb-4">
+<button class="flex items-center justify-between w-full py-4 text-left font-bold text-xl group">
+<span>03. Agile Development</span>
+<span class="material-icons text-zinc-400">add</span>
+</button>
+</div>
+<div class="border-b border-zinc-100 dark:border-zinc-800 pb-4">
+<button class="flex items-center justify-between w-full py-4 text-left font-bold text-xl group">
+<span>04. Launch &amp; Optimization</span>
+<span class="material-icons text-zinc-400">add</span>
+</button>
+</div>
+</div>
+<div class="mt-10">
+<button class="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90">Start Your Audit</button>
+</div>
+</div>
+<div class="bg-zinc-100 dark:bg-zinc-900 rounded-[2rem] p-12 relative overflow-hidden">
+<div class="bg-white dark:bg-zinc-800 rounded-2xl shadow-2xl p-6 space-y-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-zinc-200 dark:bg-zinc-700"></div>
+<div class="flex-1 h-3 bg-zinc-100 dark:bg-zinc-700 rounded-full"></div>
+</div>
+<div class="space-y-3">
+<div class="h-10 bg-zinc-50 dark:bg-zinc-700/50 rounded-lg w-full"></div>
+<div class="h-10 bg-zinc-50 dark:bg-zinc-700/50 rounded-lg w-[80%]"></div>
+<div class="h-10 bg-zinc-50 dark:bg-zinc-700/50 rounded-lg w-[90%]"></div>
+</div>
+<div class="pt-4 border-t border-zinc-100 dark:border-zinc-700 flex justify-end">
+<div class="w-24 h-8 bg-primary rounded-md"></div>
+</div>
+</div>
+<div class="absolute top-0 right-0 w-32 h-32 bg-zinc-200/50 dark:bg-zinc-800/50 blur-3xl -z-10"></div>
+</div>
+</div>
+</section>
+<section class="py-24 bg-primary text-white">
+<div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+<div>
+<p class="text-5xl font-extrabold mb-2">50+</p>
+<p class="text-zinc-400 text-sm font-medium tracking-widest uppercase">Projects Delivered</p>
+</div>
+<div>
+<p class="text-5xl font-extrabold mb-2">5+</p>
+<p class="text-zinc-400 text-sm font-medium tracking-widest uppercase">Years Experience</p>
+</div>
+<div>
+<p class="text-5xl font-extrabold mb-2">3X</p>
+<p class="text-zinc-400 text-sm font-medium tracking-widest uppercase">Client Growth</p>
+</div>
+<div>
+<p class="text-5xl font-extrabold mb-2">12</p>
+<p class="text-zinc-400 text-sm font-medium tracking-widest uppercase">Active Partners</p>
+</div>
+</div>
+</section>
+<section class="py-24 bg-white dark:bg-zinc-950" id="work">
+<div class="max-w-7xl mx-auto px-6">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+<div>
+<h2 class="text-4xl font-bold mb-4">Featured Work</h2>
+<p class="text-zinc-600 dark:text-zinc-400">A collection of projects that define digital excellence.</p>
+</div>
+<div class="flex gap-4">
+<button class="w-12 h-12 rounded-full border border-zinc-200 dark:border-zinc-800 flex items-center justify-center hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors">
+<span class="material-icons">chevron_left</span>
+</button>
+<button class="w-12 h-12 rounded-full border border-zinc-200 dark:border-zinc-800 flex items-center justify-center hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors">
+<span class="material-icons">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="space-y-12">
+<div class="group bg-zinc-50 dark:bg-zinc-900 rounded-[2.5rem] overflow-hidden grid lg:grid-cols-2">
+<div class="p-12 lg:p-20 space-y-8 flex flex-col justify-center">
+<div class="flex items-center gap-3">
+<span class="w-8 h-8 bg-zinc-200 dark:bg-zinc-800 rounded flex items-center justify-center text-xs font-bold">L</span>
+<span class="font-bold tracking-tight">LOGIX CMS</span>
+</div>
+<h3 class="text-4xl font-bold leading-tight">Revamped Content Infrastructure for Global SaaS</h3>
+<div class="flex gap-12">
+<div>
+<p class="text-2xl font-bold">45%</p>
+<p class="text-sm text-zinc-500">Speed Increase</p>
+</div>
+<div>
+<p class="text-2xl font-bold">0%</p>
+<p class="text-sm text-zinc-500">Downtime</p>
+</div>
+</div>
+<button class="w-fit px-6 py-2 border-b-2 border-primary font-bold flex items-center gap-2 group-hover:gap-4 transition-all">
+                            Read Case Study <span class="material-icons">east</span>
+</button>
+</div>
+<div class="bg-zinc-200 dark:bg-zinc-800 p-12 lg:p-0 flex items-center justify-center overflow-hidden">
+<img alt="Dashboard interface" class="rounded-2xl shadow-2xl transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqKez8k0fedMjKybWVtzT5ypuQuPqHJ7Te15ehQPmOMEoXZXfCo5Gu1b63YI4qIusBGr2QUClVzS0mcGyrp9wHWNXMPpF6kEMAwWr1NnqNQ5A4634RsX1MaKZ_D6XjvHg73wxkkPwtCNbxfAX3qrmymjIj_PZXYfHY-JntWtXQ3wxaFm3sKX-xIo5otBeFpfBgpg0T6fcCtNskvhOYtHbR0qrnB0SSRNoNwhzgZNWDvbK0NZyxyOpVHITJ4pURK-RRdKuc9dk44mc"/>
+</div>
+</div>
+<div class="group bg-zinc-50 dark:bg-zinc-900 rounded-[2.5rem] overflow-hidden grid lg:grid-cols-2">
+<div class="p-12 lg:p-20 space-y-8 flex flex-col justify-center order-1 lg:order-2">
+<div class="flex items-center gap-3">
+<span class="w-8 h-8 bg-zinc-200 dark:bg-zinc-800 rounded flex items-center justify-center text-xs font-bold">F</span>
+<span class="font-bold tracking-tight">FLUX DESIGN</span>
+</div>
+<h3 class="text-4xl font-bold leading-tight">E-commerce Platform for Luxury Fashion</h3>
+<div class="flex gap-12">
+<div>
+<p class="text-2xl font-bold">$2.4M</p>
+<p class="text-sm text-zinc-500">ARR Generated</p>
+</div>
+<div>
+<p class="text-2xl font-bold">120%</p>
+<p class="text-sm text-zinc-500">Conversion Growth</p>
+</div>
+</div>
+<button class="w-fit px-6 py-2 border-b-2 border-primary font-bold flex items-center gap-2 group-hover:gap-4 transition-all">
+                            Read Case Study <span class="material-icons">east</span>
+</button>
+</div>
+<div class="bg-zinc-200 dark:bg-zinc-800 p-12 lg:p-0 flex items-center justify-center overflow-hidden order-2 lg:order-1">
+<img alt="Ecommerce interface" class="rounded-2xl shadow-2xl transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABLzyNhxjl2aFgbYCHRxcefoeEr_q7yYOALG0WVIkOYopfN35onvp7GI9MM5xscqWdleAx6YayQf5t7lykUnSBkdn_SZyXI8UEvdIJ6fmwZ4cWtAe9xn3ONK-XANvv9dtjKRyEtQ5RQP4JPpB1j9AK2zLTb2nXoOPXcQBJnheMpG7_D8EZs_I6ibqGIZ8nARzU4zmSmNpojy6FUL80-ONlTrsfe6hogur_ZmCC5lTI4Vx0EeDlZjIgBt3FeF8IwI1mV5NnIYroYXo"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 bg-zinc-50 dark:bg-zinc-900/50" id="testimonials">
+<div class="max-w-7xl mx-auto px-6">
+<h2 class="text-4xl font-bold mb-16 text-center">Words From Partners</h2>
+<div class="grid md:grid-cols-2 gap-8">
+<div class="bg-white dark:bg-zinc-900 p-10 rounded-3xl border border-zinc-100 dark:border-zinc-800">
+<div class="flex items-center gap-1 mb-6">
+<span class="material-icons text-zinc-900 dark:text-zinc-100">star</span>
+<span class="material-icons text-zinc-900 dark:text-zinc-100">star</span>
+<span class="material-icons text-zinc-900 dark:text-zinc-100">star</span>
+<span class="material-icons text-zinc-900 dark:text-zinc-100">star</span>
+<span class="material-icons text-zinc-900 dark:text-zinc-100">star</span>
+</div>
+<p class="text-xl italic text-zinc-700 dark:text-zinc-300 mb-8 leading-relaxed">
+                        "Tushar's ability to translate complex business requirements into elegant technical solutions is unparalleled. Our platform's performance has seen a significant boost since he joined the project."
+                    </p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-zinc-200 dark:bg-zinc-700"></div>
+<div>
+<p class="font-bold">Sarah Chen</p>
+<p class="text-sm text-zinc-500">CTO, ModTech Systems</p>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-zinc-900 p-10 rounded-3xl border border-zinc-100 dark:border-zinc-800">
+<div class="flex items-center gap-1 mb-6">
+<span class="material-icons text-zinc-900 dark:text-zinc-100">star</span>
+<span class="material-icons text-zinc-900 dark:text-zinc-100">star</span>
+<span class="material-icons text-zinc-900 dark:text-zinc-100">star</span>
+<span class="material-icons text-zinc-900 dark:text-zinc-100">star</span>
+<span class="material-icons text-zinc-900 dark:text-zinc-100">star</span>
+</div>
+<p class="text-xl italic text-zinc-700 dark:text-zinc-300 mb-8 leading-relaxed">
+                        "Reliable, strategic, and an absolute expert in UI/UX. Working with Tushar was the best investment we made for our startup's digital presence this year."
+                    </p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-zinc-200 dark:bg-zinc-700"></div>
+<div>
+<p class="font-bold">Marcus Thorne</p>
+<p class="text-sm text-zinc-500">Founder, Pillar Creative</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24">
+<div class="max-w-3xl mx-auto px-6">
+<h2 class="text-4xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
+<div class="space-y-4">
+<details class="group border-b border-zinc-100 dark:border-zinc-800 pb-4" open="">
+<summary class="list-none cursor-pointer flex items-center justify-between py-4 font-bold text-lg">
+                        What is your typical project timeline?
+                        <span class="material-icons group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<p class="text-zinc-600 dark:text-zinc-400 pb-4 leading-relaxed">
+                        Most projects range from 4 to 12 weeks depending on complexity. Small MVP builds usually take 4-6 weeks, while enterprise platforms might take 3+ months.
+                    </p>
+</details>
+<details class="group border-b border-zinc-100 dark:border-zinc-800 pb-4">
+<summary class="list-none cursor-pointer flex items-center justify-between py-4 font-bold text-lg">
+                        Do you work with startups?
+                        <span class="material-icons group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<p class="text-zinc-600 dark:text-zinc-400 pb-4 leading-relaxed">
+                        Absolutely. I love helping startups build their first MVP or scale their existing product. I offer flexible engagement models for high-growth ventures.
+                    </p>
+</details>
+<details class="group border-b border-zinc-100 dark:border-zinc-800 pb-4">
+<summary class="list-none cursor-pointer flex items-center justify-between py-4 font-bold text-lg">
+                        What tech stack do you specialize in?
+                        <span class="material-icons group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<p class="text-zinc-600 dark:text-zinc-400 pb-4 leading-relaxed">
+                        My core stack is React/Next.js, TypeScript, Tailwind CSS, Node.js, and PostgreSQL. I also work with CMS platforms like Sanity and Contentful.
+                    </p>
+</details>
+</div>
+</div>
+</section>
+<section class="py-24 px-6" id="contact">
+<div class="max-w-7xl mx-auto bg-primary rounded-[3rem] p-12 lg:p-24 relative overflow-hidden text-center text-white">
+<div class="relative z-10 space-y-8">
+<h2 class="text-5xl lg:text-7xl font-extrabold tracking-tight">Ready to build something<br/>extraordinary?</h2>
+<p class="text-xl text-zinc-400 max-w-2xl mx-auto">
+                    Let's discuss your project and see how we can work together to achieve your goals.
+                </p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center">
+<button class="bg-white text-primary px-10 py-4 rounded-xl font-bold text-lg hover:bg-zinc-100 transition-colors">Book a Strategy Session</button>
+<button class="border border-zinc-700 bg-zinc-900/50 backdrop-blur-md px-10 py-4 rounded-xl font-bold text-lg hover:bg-zinc-800 transition-colors">Send a Message</button>
+</div>
+</div>
+<div class="absolute -bottom-24 -right-24 w-96 h-96 bg-zinc-800 rounded-full blur-3xl opacity-50"></div>
+<div class="absolute -top-24 -left-24 w-96 h-96 bg-zinc-800 rounded-full blur-3xl opacity-50"></div>
+</div>
+</section>
+<footer class="py-20 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800">
+<div class="max-w-7xl mx-auto px-6">
+<div class="grid md:grid-cols-4 gap-12 mb-20">
+<div class="col-span-2">
+<div class="flex items-center gap-2 mb-6">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+<span class="text-white font-bold text-lg">T</span>
+</div>
+<span class="text-xl font-bold tracking-tight">Tushar Joy</span>
+</div>
+<p class="text-zinc-500 max-w-xs leading-relaxed">
+                        A multidisciplinary developer and designer focusing on high-impact digital products. Built with passion in Dhaka.
+                    </p>
+</div>
+<div>
+<h4 class="font-bold mb-6">Navigation</h4>
+<ul class="space-y-4 text-zinc-500 text-sm">
+<li><a class="hover:text-primary transition-colors" href="#services">Services</a></li>
+<li><a class="hover:text-primary transition-colors" href="#work">Portfolio</a></li>
+<li><a class="hover:text-primary transition-colors" href="#process">Process</a></li>
+<li><a class="hover:text-primary transition-colors" href="#testimonials">Testimonials</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-6">Socials</h4>
+<ul class="space-y-4 text-zinc-500 text-sm">
+<li><a class="hover:text-primary transition-colors" href="#">LinkedIn</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">GitHub</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Dribbble</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Twitter</a></li>
+</ul>
+</div>
+</div>
+<div class="pt-10 border-t border-zinc-100 dark:border-zinc-800 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-zinc-400">
+<p>© 2024 Tushar Joy. All rights reserved.</p>
+<div class="flex gap-8">
+<a class="hover:text-primary" href="#">Privacy Policy</a>
+<a class="hover:text-primary" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</footer>
+<button class="fixed bottom-8 right-8 w-12 h-12 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full shadow-lg flex items-center justify-center z-50" onclick="document.documentElement.classList.toggle('dark')">
+<span class="material-icons dark:hidden">dark_mode</span>
+<span class="material-icons hidden dark:block">light_mode</span>
+</button>
+
+</body></html>
